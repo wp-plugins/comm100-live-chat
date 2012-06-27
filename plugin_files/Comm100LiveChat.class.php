@@ -55,7 +55,7 @@ class Comm100LiveChat
 	{
 		if (is_null($this->plugin_url))
 		{
-			$this->plugin_url = WP_PLUGIN_URL.'/wp-comm100-livechat/plugin_files';
+			$this->plugin_url = WP_PLUGIN_URL.'/comm100-live-chat/plugin_files';
 		}
 
 		return $this->plugin_url;
