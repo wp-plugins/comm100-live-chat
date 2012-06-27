@@ -36,12 +36,3 @@ This is the long description.  No limit, and you can use Markdown (as well as in
 1. Click the 'Live Chat' menu on the left.
 1. Register an account or login.
 1. Go to the Widgets page to activate live chat widget and set personal customizations for your own live chat.
-
-== Screenshots ==
-
-/tags/4.3/screenshot-1.png
-
-== Changelog ==
-
-= 1.0 =
-First commit
