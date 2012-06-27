@@ -25,9 +25,9 @@ This is the long description.  No limit, and you can use Markdown (as well as in
 
 **Comm100 Live Chat Software Works with:**
 
-*  Browser: IE, Opera, Safari, Firefox, Google Chrome¡­
-*  OS: Windows, Linux, Mac¡­
-*  Mobile: iPhone, Android, Blackberry, Java, Windows Mobile¡­
+*  Browser: IE, Opera, Safari, Firefox, Google Chrome...
+*  OS: Windows, Linux, Mac...
+*  Mobile: iPhone, Android, Blackberry, Java, Windows Mobile...
 
 == Installation ==
 
