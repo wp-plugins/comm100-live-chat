@@ -2,7 +2,7 @@
 Plugin Name: Comm100 Live Chat
 Contributors: roychen
 Requires at least: 3.0
-Tested up to: 3.5
+Tested up to: 3.4
 Stable tag: 1.0
 Tags: plugin, chat, live chat, comm100, admin, widget, customer support, live support, wordpress, live help
 License: GPLv2 or later
