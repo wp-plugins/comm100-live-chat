@@ -14,8 +14,6 @@ Comm100 Live Chat promotes sales, reduces operating costs and increases your cus
 
 Comm100 Live Chat is the enterprise-grade live chat software for website that's entirely hosted by Comm100.  Jeniffer from Complete Online Pharmacy said, "Comm100 Live Chat is a way to generate leads and convert them to sales. We thank Comm100 for providing such a useful service." [Check it out](http://www.comm100.com/livechat/).
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
-
 **4 Reasons to Use Comm100 Live Chat**
 
 *  Customize Your Visitor Interface - You can personalize the chat button, chat window, pre-chat window and offline message window with your own branding, style and language. 
