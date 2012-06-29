@@ -225,7 +225,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<select id="register_edition" name="register_edition" type="text" style="width:300px">
 
 									<?php for ($i=0;$i<count($editions);$i++) { ?>
-										<option value="<?php echo $editions[$i]["id"]; ?>" <?php if ($this->get_post_data('register_edition') == $editions[$i]['id']) echo 'selected="selected"' ?>>
+										<option value="<?php echo $editions[$i]["id"]; ?>" <?php if (($this->get_post_data('register_edition') == $editions[$i]['id']) || ($this->get_post_data('register_edition') =='' && $editions[$i]['id']=='16' )) echo 'selected="selected"' ?>>
 											<?php echo $editions[$i]['name'].' $'.$editions[$i]['price']; ?>
 										</option>
 									<?php } ?>
