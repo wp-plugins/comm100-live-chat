@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Comm100 Live Chat
-Plugin URI: http://www.comm100.com/livechat/wordpressplugin.aspx
-Description: This plugin allows to quickly install Comm100 Live Chat on any WordPress website.
+Plugin URI: http://livechat.comm100.com/wordpress-chat-plugin.aspx
+Description: Quickly install Comm100 Live Chat onto your WordPress site and engage your website/blog visitors in real time.
 Author: Comm100 Live Chat
 Version: 1.0
-Author URI: http://www.comm100.com/livechat
+Author URI: http://livechat.comm100.com/
 */
 
 if (is_admin())
