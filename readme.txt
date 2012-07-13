@@ -56,7 +56,7 @@ For more detailed installation instructions, please refer to our [Comm100 Live C
 
 **How much does Comm100 Live Chat cost?**
 
-Comm100 Live Chat is a commercial product, which offers three editions with different prices. [See comparison & pricing.] (http://livechat.comm100.com/pricing.aspx "Live Chat Pricing")
+Comm100 Live Chat is a commercial product, which offers three editions with different prices. [See comparison & pricing.](http://livechat.comm100.com/pricing.aspx "Live Chat Pricing")
 
 **How to make my chat button show online?**
 
