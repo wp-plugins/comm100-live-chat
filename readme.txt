@@ -19,11 +19,10 @@ Comm100 Live Chat WordPress Plugin is specifically designed for you to quickly i
 
 **What Our Customers Say**
 
-"Comm100 Live Chat is a way to generate leads and convert them to sales. We thank Comm100 for providing such a useful service."    
-			------ Jeniffer, Complete Online Pharmacy 
+"Comm100 Live Chat is a way to generate leads and convert them to sales. We thank Comm100 for providing such a useful service."    ------ Jeniffer, Complete Online Pharmacy 
 
-"We are very impressed with Comm100 Live Chat. Having tried [live support](http://www.comm100.com/livesupport/ "Live Support Software") type products for our business in the past, they never seemed to really benefit our business. However, Comm100 Live Chat has definitely increased sales and we tend to think that our website before we use this live chat software was like having a shop with no staff; we can now help customers at any point during their visit to our website and track their progress. This is also very professional and just works and is easy for all our staff to use. Comm100 Live Chat has become vital to our business.
------- Keziah Edwards, Travel Consultant at Beach Club Resorts
+"We are very impressed with Comm100 Live Chat. Having tried [live support](http://www.comm100.com/livesupport/ "Live Support Software") type products for our business in the past, they never seemed to really benefit our business. However, Comm100 Live Chat has definitely increased sales and we tend to think that our website before we use this live chat software was like having a shop with no staff; we can now help customers at any point during their visit to our website and track their progress. This is also very professional and just works and is easy for all our staff to use. Comm100 Live Chat has become vital to our business."
+			------ Keziah Edwards, Travel Consultant at Beach Club Resorts
 
 [>>More Live Chat Stories](http://livechat.comm100.com/casestudytestimonials.aspx "Live Chat Customer Stories")
 
@@ -52,36 +51,36 @@ You can quickly get live chat up and runing on your WordPress site following the
 
 For more detailed installation instructions, please refer to our [Comm100 Live Chat WordPress Plugin Setup Guide](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=376 "Live Chat WordPress Plugin Setup Guide").
 
-== FAQ ==
+== Frequently Asked Questions ==
 
-**How much does Comm100 Live Chat cost?**
+= How much does Comm100 Live Chat cost? =
 
 Comm100 Live Chat is a commercial product, which offers three editions with different prices. [See comparison & pricing.](http://livechat.comm100.com/pricing.aspx "Live Chat Pricing")
 
-**How to make my chat button show online?**
+= How to make my chat button show online? =
 
 You need to log into Comm100 Live Chat Visitor Monitor to make your live chat button shown Online.You can log in on the web by clicking "Get Online & Chat" from the control panel or directly log in from the desktop or mobile apps. [Learn more](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=269 "Get Live Chat Online")
 
-**Can I customize my live chat?**
+= Can I customize my live chat? =
 
 Sure. Comm100 Live Chat is fully customizable. You can freely personalize the following for your live chat according to your own needs: [Chat Button](http://hosted.comm100.com/KnowledgeBase/Main/Article.aspx?siteId=10000&Id=151 "Customize Live Chat Button"), [Chat Window](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=644 "Customize Live Chat Window"), [Invitation](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=167 "Customize Live Chat Invitation"), [Pre-Chat Window](http://hosted.comm100.com/KnowledgeBase/Main/Article.aspx?siteId=10000&Id=258 "Customize Pre-Chat Window"), [Offline Message Window](http://hosted.comm100.com/KnowledgeBase/Main/Article.aspx?siteId=10000&Id=256 "Customize Offline Message Window"), [Rating Window](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=683 "Customize Live Chat Rating Window"), [Interface Language](http://hosted.comm100.com/KnowledgeBase/Main/Article.aspx?siteId=10000&Id=201 "Customize Live Chat Interface Language") and some other advanced settings.
 
-**Can I invite a visitor to chat with me?**
+= Can I invite a visitor to chat with me? =
 
 Yes. You can either manually send a live chat invitation to a visitor ([how?](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=716 "How to manually invite a visitor to live chat?")) or set up the auto invitation to invite your visitors to chat automatically([how?](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=682 "How to automatically invite a visitor to live chat?")).
 
-**How can I view my chat history?**
+= How can I view my chat history? =
 
 All your live chat records and offline messages are stored in our database. You can query for a particular record from your Comm100 Live Chat control panel. [Learn more](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=166 "View Live Chat History") 
 
-**Does Comm100 Live Chat support multiple operators?**
+= Does Comm100 Live Chat support multiple operators? =
 
 Yes. You can add unlimited operators into your live chat account. For how to add an operator, please [click here](http://hosted.comm100.com/KnowledgeBase/Main/Article.aspx?siteId=10000&Id=190 "Add Live Chat Operator").
 
-**Who is Comm100?**
+= Who is Comm100? =
 
 As the provider of Comm100 Live Chat, Comm100 is the leading global provider of enterprise-level customer service and communication solutions, including Live Chat, Support Ticket, Email Marketing, Help Desk, Forum and Knowledge Base. Powerful, integrated and hosted, Comm100 gives businesses an unmatched power to communicate effectively with their customers through multiple channels and deliver superior customer experience. Growing at an unprecedented rate, Comm100 has won the trust of over 192,800 businesses from all over the world. [Watch Comm100 Introduction Video](http://www.comm100.com/video/comm100overall.aspx?type=comm100introductionright "Comm100 Introduction Video")
 
-**Where can I get help if I have more questions?**
+= Where can I get help if I have more questions? =
 
 Our dedicated support team are always standing by to help you along the way. Please visit our online [help desk](http://hosted.comm100.com/HelpDesk/Main/Main.aspx?siteid=10000 "Comm100 Help Desk Portal") for any support related with Comm100 Live Chat.
