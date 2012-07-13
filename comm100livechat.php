@@ -4,7 +4,7 @@ Plugin Name: Comm100 Live Chat
 Plugin URI: http://livechat.comm100.com/wordpress-chat-plugin.aspx
 Description: Quickly install Comm100 Live Chat onto your WordPress site and engage your website/blog visitors in real time.
 Author: Comm100 Live Chat
-Version: 1.0
+Version: 1.1
 Author URI: http://livechat.comm100.com/
 */
 
