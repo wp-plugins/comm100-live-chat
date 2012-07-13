@@ -139,6 +139,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			<form method="POST" action="?page=comm100livechat" name="site_id_form">
 				<input type="hidden" name="site_id" id="site_id" />
 			</form>
+		<?php if (!$this->is_installed()) { ?>
 			<script type="text/javascript" src="<?php echo Comm100LiveChat::$service_url; ?>?action=session"></script>
 
 			<div id="comm100livechat_have_account" class="metabox-holder">
