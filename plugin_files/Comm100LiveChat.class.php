@@ -147,7 +147,7 @@ class Comm100LiveChatWidget extends WP_Widget
 							document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
 							document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
 
-							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_code(code);
+							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = encodeURIComponent(code);
 						});
 					}
 
@@ -157,7 +157,7 @@ class Comm100LiveChatWidget extends WP_Widget
 				}
 				else {
 					comm100_plugin.get_code(<?php echo $site_id?>, plans[0].id, function(code) {
-						document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_code(code);
+						document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = encodeURIComponent(code);
 
 						document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
 						document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = plans[0].id;
@@ -204,7 +204,7 @@ class Comm100LiveChatWidget extends WP_Widget
 	public function widget($args, $instance)
 	{
 		if (Comm100LiveChat::get_instance()->is_installed()) {
-			echo html_entity_decode($instance['code']);	
+			echo urldecode($instance['code']);	
 		}		
 	}
 }
