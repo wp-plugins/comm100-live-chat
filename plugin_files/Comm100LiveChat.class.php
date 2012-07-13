@@ -116,59 +116,71 @@ class Comm100LiveChatWidget extends WP_Widget
 			function html_encode(html) {
 				var div=document.createElement("div");
 				var txt=document.createTextNode(html);
-				div.appendChild(txt);return div.innerHTML;
+				div.appendChild(txt);
+				return div.innerHTML;
 			}
-			comm100_plugin.get_plans(<?php echo $site_id?>, function(plans) {
-				if (plans.length == 0) {
-					alert('Error: no code plan.');
-					return;
-				}
+			setTimeout(function(){
+				comm100_plugin.get_plans(<?php echo $site_id?>, function(plans) {
+					if (plans.length == 0) {
+						alert('Error: no code plan.');
+						return;
+					}
 
 
-				if (plans.length > 1) {
-					var list_plans = document.getElementById('select_<?php echo $this->get_field_id('plan_id'); ?>');
-					list_plans.innerHTML = '';
+					if (plans.length > 1) {
+						var list_plans = document.getElementById('select_<?php echo $this->get_field_id('plan_id'); ?>');
+						list_plans.innerHTML = '';
 
-					for (var i = 0; i < plans.length; i++) {
-						var opt = document.createElement('OPTION');
-						opt.innerHTML = plans[i].name;
-						opt.value = plans[i].id;
-						if ('<?php echo $plan_id ?>' == plans[i].id) {
-							opt.selected = 'selected';
-						}
-						list_plans.appendChild(opt);
-					};
 
-					list_plans.onchange = function() {
-						document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
-						document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+						for (var i = 0; i < plans.length; i++) {
+							var opt = document.createElement('OPTION');
+							opt.innerHTML = plans[i].name;
+							opt.value = plans[i].id;
+							if ('<?php echo $plan_id ?>' == plans[i].id) {
+								opt.selected = 'selected';
+							}
+							list_plans.appendChild(opt);
+						};
 
-						document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = this.value;
-						comm100_plugin.get_code(<?php echo $site_id?>, this.value, function(code) {
+						var selected_plan = document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = (<?php echo $plan_id?> || plans[0].id);
+
+						comm100_plugin.get_code(<?php echo $site_id?>, selected_plan, function(code) {
 							document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
 							document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
+							document.getElementById("single_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+
+
+							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
+						});
+
+
+						list_plans.onchange = function() {
+							document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
+							document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+
+							document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = this.value;
+							comm100_plugin.get_code(<?php echo $site_id?>, this.value, function(code) {
+								document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+								document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
+
+								document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
+							});
+						}
+					}
+					else {
+						document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = plans[0].id;
+						comm100_plugin.get_code(<?php echo $site_id?>, plans[0].id, function(code) {
+							document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+							document.getElementById("a_<?php echo $this->get_field_id('plan_id'); ?>").href = 
+								'http://hosted.comm100.com/LiveChatFunc/PlanDetailManage.aspx?siteId=<?php echo $site_id; ?>&ifEditPlan=true&codeplanId=' + plans[0].id;
+							
+							document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+							document.getElementById("single_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
 
 							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
 						});
 					}
-
-					document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
-					document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
-					document.getElementById("single_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
-				}
-				else {
-					comm100_plugin.get_code(<?php echo $site_id?>, plans[0].id, function(code) {
-						document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
-
-						document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
-						document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = plans[0].id;
-						document.getElementById("a_<?php echo $this->get_field_id('plan_id'); ?>").href = 
-							'http://hosted.comm100.com/LiveChatFunc/PlanDetailManage.aspx?siteId=<?php echo $site_id; ?>&ifEditPlan=true&codeplanId=' + plans[0].id;
-						
-						document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
-						document.getElementById("single_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
-					});
-				}
+				},200);
 			});
 		</script>
 		<div id="loading_<?php echo $this->get_field_id('plan_id'); ?>">
@@ -183,8 +195,8 @@ class Comm100LiveChatWidget extends WP_Widget
 			<div style="margin-top:5px;">
 				<script type="text/javascript">
 					function open_customize(plan_field_id) {
-						window.open('http://hosted.comm100.com/LiveChatFunc/PlanDetailManage.aspx?siteId=<?php echo $site_id; ?>&codeplanId='
-							+ document.getElementById(plan_field_id).value + '&ifEditPlan=true');
+						window.open('http://hosted.comm100.com/LiveChatFunc/PlanGeneralManage.aspx?siteId=<?php echo $site_id; ?>&ifEditPlan=true&codePlanId=' 
+							+ document.getElementById(plan_field_id).value);
 					}
 				</script>
 				Click <a href="#" onclick="open_customize('<?php echo $this->get_field_id('plan_id'); ?>');return false;" target="_blank">here</a> to customize this code plan.
@@ -197,7 +209,7 @@ class Comm100LiveChatWidget extends WP_Widget
 		</div>
 		<input type="hidden" id="<?php echo $this->get_field_id('plan_id'); ?>" 
 			value="<?php echo $plan_id; ?>" name="<?php echo $this->get_field_name('plan_id'); ?>"/>
-		<input type="hidden" value="<?php echo str_replace('"', '\\"',$code); ?>" id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>
+		<input type="hidden" id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>
 <?php
 
 	}
@@ -209,6 +221,3 @@ class Comm100LiveChatWidget extends WP_Widget
 		}		
 	}
 }
-
-
-
