@@ -113,7 +113,7 @@ class Comm100LiveChatWidget extends WP_Widget
 		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js"></script>
 
 		<script type="text/javascript">
-			function html_code(html) {
+			function html_encode(html) {
 				var div=document.createElement("div");
 				var txt=document.createTextNode(html);
 				div.appendChild(txt);return div.innerHTML;
@@ -147,7 +147,7 @@ class Comm100LiveChatWidget extends WP_Widget
 							document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
 							document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = '';
 
-							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = encodeURIComponent(code);
+							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
 						});
 					}
 
@@ -157,7 +157,7 @@ class Comm100LiveChatWidget extends WP_Widget
 				}
 				else {
 					comm100_plugin.get_code(<?php echo $site_id?>, plans[0].id, function(code) {
-						document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = encodeURIComponent(code);
+						document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
 
 						document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
 						document.getElementById("<?php echo $this->get_field_id('plan_id'); ?>").value = plans[0].id;
@@ -196,7 +196,7 @@ class Comm100LiveChatWidget extends WP_Widget
 		</div>
 		<input type="hidden" id="<?php echo $this->get_field_id('plan_id'); ?>" 
 			value="<?php echo $plan_id; ?>" name="<?php echo $this->get_field_name('plan_id'); ?>"/>
-		<input type="hidden" value='<?php echo $code; ?>' id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>
+		<input type="hidden" value="<?php echo str_replace('"', '\\"',$code); ?>" id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>
 <?php
 
 	}
@@ -204,7 +204,7 @@ class Comm100LiveChatWidget extends WP_Widget
 	public function widget($args, $instance)
 	{
 		if (Comm100LiveChat::get_instance()->is_installed()) {
-			echo urldecode($instance['code']);	
+			echo html_entity_decode($instance['code']);	
 		}		
 	}
 }
