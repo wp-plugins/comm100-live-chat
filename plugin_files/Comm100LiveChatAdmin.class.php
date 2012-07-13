@@ -54,17 +54,6 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		error_reporting(E_ALL & ~E_USER_NOTICE);
 	}
 
-	private function get_editions() {
-		$result = $this->request('?action=editions');
-
-		if (!is_wp_error($result) && $result['success']) {
-			return $result['response'];
-		}
-		else {
-			return array();
-		}
-	}
-
 	/**
 	 * Returns this plugin's version
 	 *
@@ -150,9 +139,6 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			<form method="POST" action="?page=comm100livechat" name="site_id_form">
 				<input type="hidden" name="site_id" id="site_id" />
 			</form>
-		<?php if (!$this->is_installed()) { 
-			$editions = $this->get_editions();
-		?>
 			<script type="text/javascript" src="<?php echo Comm100LiveChat::$service_url; ?>?action=session"></script>
 
 			<div id="comm100livechat_have_account" class="metabox-holder">
@@ -207,7 +193,8 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			</div>
 
 			<div id="comm100livechat_register" class="metabox-holder" style="display:none;">
-				<div class="postbox">
+				<div class="postbox" id="comm100livechat_register_loading">Loading...</div>
+				<div class="postbox" id="comm100livechat_register_content" style="display:none;">
 					<h3>Create a new Comm100 account:</h3>
 					<div class="postbox_content">
 						<div style="padding:10px;display:none;" id="register_error">
@@ -222,15 +209,25 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_edition" style="font-size:12px;">Edition:</label>
 								</th>
 								<td>
-									<select id="register_edition" name="register_edition" type="text" style="width:300px">
+									<script type="text/javascript">
+										comm100_plugin.get_editions(function(editions) {
+											document.getElementById('comm100livechat_register_loading').style.display = 'none';
+											document.getElementById('comm100livechat_register_content').style.display = '';
 
-									<?php for ($i=0;$i<count($editions);$i++) { ?>
-										<option value="<?php echo $editions[$i]["id"]; ?>" <?php if (($this->get_post_data('register_edition') == $editions[$i]['id']) || ($this->get_post_data('register_edition') =='' && $editions[$i]['id']=='16' )) echo 'selected="selected"' ?>>
-											<?php echo $editions[$i]['name'].' $'.$editions[$i]['price']; ?>
-										</option>
-									<?php } ?>
+											var list_editions = document.getElementById('register_edition');
 
-									</select>
+											for (var i = 0; i < editions.length; i++) {
+												var opt = document.createElement('OPTION');
+												opt.innerHTML = editions[i].name + ' ' + editions[i].price;
+												opt.value = editions[i].id;
+												if (16 == editions[i].id) {
+													opt.selected = 'selected';
+												}
+												list_editions.appendChild(opt);
+											};
+										});
+									</script>
+									<select id="register_edition" name="register_edition" type="text" style="width:300px"></select>
 								</td>
 							</tr>
 							<tr>

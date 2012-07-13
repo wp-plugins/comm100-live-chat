@@ -1,4 +1,6 @@
-var comm100_script_id = 0;
+if (typeof comm100_script_id == 'undefined')
+	comm100_script_id = 0;
+
 function comm100_script_request(params, success, error) {
 	function request() {
 		var _id = 'comm100_script_' + comm100_script_id++;
@@ -15,12 +17,13 @@ function comm100_script_request(params, success, error) {
 		this.send = function _send (url, success, error) {
 			_append_script(_id, url + '&callback=' + _id + '.onresponse');
 			_timer_timeout = setTimeout(function() {
-				error('Operation timeout.');
-			}, 30 * 1000);
+				if (error) error('Operation timeout.');
+			}, 60 * 1000);
 
 			_success = success || function() {};		
 		}
 		this.onresponse = function _onresponse(response) {
+			//alert(response.toString())；
 			window[_id] = null;
 			var scr = document.getElementById('_' + _id);
 			document.getElementsByTagName('head')[0].removeChild(scr);
@@ -119,9 +122,27 @@ var comm100_plugin = (function() {
 			document.getElementById('login_error_text').innerHTML = response.error;
 		});
 	}
+	function _get_plans(site_id, callback) {
+		comm100_script_request('?action=plans&siteId=' + site_id, function(response){
+			callback(response.response);
+		});
+	}
+	function _get_code(site_id, plan_id, callback) {
+		comm100_script_request('?action=code&siteId=' + site_id + '&planId=' + plan_id, function(response){
+			callback(response.response);
+		});
+	}
+	function _get_editions(callback) {	
+		comm100_script_request('?action=editions', function(response) {
+			callback(response.response);
+		});	
+	}
 	return {
 		register: _register,
-		login: _login
+		login: _login,
+		get_plans: _get_plans,
+		get_code: _get_code,
+		get_editions: _get_editions
 	};
 })();
 
