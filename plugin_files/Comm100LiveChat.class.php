@@ -204,9 +204,9 @@ class Comm100LiveChatWidget extends WP_Widget
 
 	public function widget($args, $instance)
 	{
-		//if (Comm100LiveChat::get_instance()->is_installed()) {
-			echo "<div id='comm100'></div>"; //html_entity_decode($instance['code']);	
-		//}		
+		if (Comm100LiveChat::get_instance()->is_installed()) {
+			echo html_entity_decode($instance['code']);	
+		}		
 	}
 }
 
