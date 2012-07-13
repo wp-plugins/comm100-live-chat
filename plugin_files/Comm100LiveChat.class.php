@@ -127,6 +127,7 @@ class Comm100LiveChatWidget extends WP_Widget
 
 				if (plans.length > 1) {
 					var list_plans = document.getElementById('select_<?php echo $this->get_field_id('plan_id'); ?>');
+					list_plans.innerHTML = '';
 
 					for (var i = 0; i < plans.length; i++) {
 						var opt = document.createElement('OPTION');
