@@ -196,7 +196,7 @@ class Comm100LiveChatWidget extends WP_Widget
 		</div>
 		<input type="hidden" id="<?php echo $this->get_field_id('plan_id'); ?>" 
 			value="<?php echo $plan_id; ?>" name="<?php echo $this->get_field_name('plan_id'); ?>"/>
-		<input type="hidden" value="<?php echo $code; ?>" id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>
+		<input type="hidden" value='<?php echo $code; ?>' id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>
 <?php
 
 	}
