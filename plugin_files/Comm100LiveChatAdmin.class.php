@@ -219,7 +219,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 											for (var i = 0; i < editions.length; i++) {
 												var opt = document.createElement('OPTION');
-												opt.innerHTML = editions[i].name + ' ' + editions[i].price;
+												opt.innerHTML = editions[i].name + ' $' + editions[i].price;
 												opt.value = editions[i].id;
 												if (16 == editions[i].id) {
 													opt.selected = 'selected';
