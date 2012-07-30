@@ -97,6 +97,15 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 		add_submenu_page(
 			'comm100livechat',
+			'Online & Chat',
+			'Online & Chat',
+			'administrator',
+			'comm100livechat_online',
+			array($this, 'visitor_monitor_page')
+		);
+
+		add_submenu_page(
+			'comm100livechat',
 			'Control panel',
 			'Control panel',
 			'administrator',
@@ -207,7 +216,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 						<table class="form-table">
 							<tr>
 								<th scope="row">
-									<label for="register_edition" style="font-size:12px;">Edition:</label>
+									<label for="register_edition" style="font-size:12px;">Edition: </label>
 								</th>
 								<td>
 									<script type="text/javascript">
@@ -219,7 +228,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 											for (var i = 0; i < editions.length; i++) {
 												var opt = document.createElement('OPTION');
-												opt.innerHTML = editions[i].name + ' $' + editions[i].price;
+												opt.innerHTML = editions[i].name.replace('Comm100 Live Chat ', '') + ' $' + editions[i].price + ' / month';
 												opt.value = editions[i].id;
 												if (16 == editions[i].id) {
 													opt.selected = 'selected';
@@ -228,7 +237,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 											};
 										});
 									</script>
-									<select id="register_edition" name="register_edition" type="text" style="width:300px"></select>
+									<select id="register_edition" name="register_edition" style="width:230px"></select> (15 days free trail)
 								</td>
 							</tr>
 							<tr>
@@ -236,7 +245,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_name" style="font-size:12px;">Full Name:</label>
 								</th>
 								<td>
-									<input id="register_name" name="register_name" type="text" style="width:200px" onfocus="hide_element('register_name_required');" 
+									<input id="register_name" name="register_name" type="text" style="width:200px"
 										onblur="validate_register_input('name')" value="<?php echo $this->get_post_data('register_name'); ?>"/>
 									<span style="color:red">* </span><span id="register_name_required" style="color:red;display:none;">Required</span>
 								</td>
@@ -246,7 +255,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_email" style="font-size:12px;">Email:</label>
 								</th>
 								<td>
-									<input id="register_email" name="register_email" type="text" style="width:200px" onfocus="hide_element('register_email_required');hide_element('register_email_valid');" onblur="validate_register_input_email('email');" value="<?php echo $this->get_post_data('register_email'); ?>"/>
+									<input id="register_email" name="register_email" type="text" style="width:200px" onblur="validate_register_input_email('email');" value="<?php echo $this->get_post_data('register_email'); ?>"/>
 									<span style="color:red">* </span>
 									<span id="register_email_required" style="color:red;display:none;">Required</span>
 									<span id="register_email_valid" style="color:red;display:none;">Invalid Email</span>
@@ -257,7 +266,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_password" style="font-size:12px;">Password:</label>
 								</th>
 								<td>
-									<input id="register_password" name="register_password" type="password" style="width:200px" onfocus="hide_element('register_password_required');" onblur="validate_register_input('password')"/>
+									<input id="register_password" name="register_password" type="password" style="width:200px" onblur="validate_register_input('password')"/>
 									<span style="color:red">* </span><span id="register_password_required" style="color:red;display:none;">Required</span>
 								</td>
 							</tr>
@@ -266,7 +275,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_phone" style="font-size:12px;">Telephone:</label>
 								</th>
 								<td>
-									<input id="register_phone" name="register_phone" type="text" style="width:200px" onfocus="hide_element('register_phone_required');" onblur="validate_register_input('phone')" value="<?php echo $this->get_post_data('register_phone'); ?>"/>
+									<input id="register_phone" name="register_phone" type="text" style="width:200px" onblur="validate_register_input('phone')" value="<?php echo $this->get_post_data('register_phone'); ?>"/>
 									<span style="color:red">* </span><span id="register_phone_required" style="color:red;display:none;">Required</span>
 								</td>
 							</tr>
@@ -284,8 +293,12 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</th>
 								<td>
 									<div>
-										<input id="register_verification_code" name="register_verification_code" type="text" style="width:100px" onfocus="hide_element('register_verification_code_required');" onblur="validate_register_input('verification_code')"/>
-										<span><img style="cursor:pointer;" onclick="this.src='https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';" id="register_verification_code_image" src=""/></span>
+										<input id="register_verification_code" name="register_verification_code" type="text" style="width: 120px;float: left;margin-right: 6px;" onblur="validate_register_input('verification_code')"/>
+										<span style="float: left;margin-right: 4px;">
+                                            <img title="Click to change a verification code." alt="Verification Code" 
+                                                style="cursor:pointer;border: solid 1px #DFDFDF;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" 
+                                                onclick="this.src='https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';" id="register_verification_code_image" src=""/>
+                                        </span>
 										<script type="text/javascript">
 											setTimeout(function() {
 												document.getElementById('register_verification_code_image').src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';
@@ -302,8 +315,12 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 						<div class="submit" style="padding-left:10px;">
 							<input type="submit" id="register_submit" name="register_submit" value="Create Account" class="button-primary" onclick="if (validate_register_inputs()){comm100_plugin.register();}return false;"/>
-							<img id="register_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="waitting" style="display:none;"/>
-						</div>
+							<img id="register_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="Please wait..." alt="waitting" style="display:none;"/>
+						
+                            <div style="padding:5px 0 0 4px;font-size: smaller;">
+                                By clicking "Create Account", you agree to Comm100 <a href="http://hosted.comm100.com/admin/help/Comm100-Agreement.htm" id="aHref" target="_blank">Hosted Service Agreement</a> and <a href="http://www.comm100.com/privacy/" target="_blank">Privacy Policy</a>.
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -336,11 +353,84 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		$site_id = $this->get_site_id();
 		$cpanel_url = "https://hosted.comm100.com/adminmanage/login.aspx?apptype=1&siteId=" . $site_id;
 		echo <<<HTML
-			<iframe id="control_panel" src="{$cpanel_url}" frameborder="0" width="100%" height="100%"></iframe>
+            <script>
+                setTimeout(function() {
+                    if (document.getElementsByClassName == null) {
+                        document.getElementsByClassName = function(className){
+                           var itemsfound = new Array;
+                           var elements = document.getElementsByTagName('*');
+                           for(var i=0;i<elements.length;i++){
+                              if(elements[i].class == className){
+                                 itemsfound.push(elements[i]);
+                              }
+                           }
+                           return itemsfound;
+                        }
+                    }
+
+                    var update_nag = document.getElementsByClassName('update-nag')[0];
+                    if (update_nag) {
+                        update_nag.style.display = 'none';
+                    }
+
+                    var footer = document.getElementById('footer');
+                    if (footer) {
+                        footer.style.display = 'none';
+                    }
+
+                    var content = document.getElementById('wpbody-content');
+                    if (content) {
+                        content.style.paddingBottom = '0px';
+                    }
+                }, 2000);
+            </script>
+			<iframe id="control_panel" src="{$cpanel_url}" frameborder="0" width="100%" height="700"></iframe>
 			<p>Optionally, open the Control panel in an <a href="{$cpanel_url}" target="_blank">external window</a>.</p>
 HTML;
 	}
+    
+	public function visitor_monitor_page()
+	{
+		$site_id = $this->get_site_id();
+		$cpanel_url = "https://hosted.comm100.com/livechat/visitormonitor.aspx";
+        if ($site_id > 0)
+            $cpanel_url = $cpanel_url . '?siteId=' . $site_id;
+		echo <<<HTML
+            <script>
+                setTimeout(function() {
+                    if (document.getElementsByClassName == null) {
+                        document.getElementsByClassName = function(className){
+                           var itemsfound = new Array;
+                           var elements = document.getElementsByTagName('*');
+                           for(var i=0;i<elements.length;i++){
+                              if(elements[i].class == className){
+                                 itemsfound.push(elements[i]);
+                              }
+                           }
+                           return itemsfound;
+                        }
+                    }
 
+                    var update_nag = document.getElementsByClassName('update-nag')[0];
+                    if (update_nag) {
+                        update_nag.style.display = 'none';
+                    }
+
+                    var footer = document.getElementById('footer');
+                    if (footer) {
+                        footer.style.display = 'none';
+                    }
+
+                    var content = document.getElementById('wpbody-content');
+                    if (content) {
+                        content.style.paddingBottom = '0px';
+                    }
+                }, 2000);
+            </script>
+			<iframe id="control_panel" src="{$cpanel_url}" frameborder="0" width="100%" height="700" style="margin:10px 0 0px 0"></iframe>
+			<div>Optionally, open the Control panel in an <a href="{$cpanel_url}" target="_blank">external window</a>.</div>
+HTML;
+	}
 
 	public function livechat_settings_link($links, $file)
 	{
