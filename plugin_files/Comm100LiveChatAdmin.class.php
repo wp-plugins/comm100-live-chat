@@ -245,7 +245,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_name" style="font-size:12px;">Full Name:</label>
 								</th>
 								<td>
-									<input id="register_name" name="register_name" type="text" style="width:200px"
+									<input id="register_name" name="register_name" type="text" style="width:230px"
 										onblur="validate_register_input('name')" value="<?php echo $this->get_post_data('register_name'); ?>"/>
 									<span style="color:red">* </span><span id="register_name_required" style="color:red;display:none;">Required</span>
 								</td>
@@ -255,7 +255,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_email" style="font-size:12px;">Email:</label>
 								</th>
 								<td>
-									<input id="register_email" name="register_email" type="text" style="width:200px" onblur="validate_register_input_email('email');" value="<?php echo $this->get_post_data('register_email'); ?>"/>
+									<input id="register_email" name="register_email" type="text" style="width:230px" onblur="validate_register_input_email('email');" value="<?php echo $this->get_post_data('register_email'); ?>"/>
 									<span style="color:red">* </span>
 									<span id="register_email_required" style="color:red;display:none;">Required</span>
 									<span id="register_email_valid" style="color:red;display:none;">Invalid Email</span>
@@ -266,7 +266,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_password" style="font-size:12px;">Password:</label>
 								</th>
 								<td>
-									<input id="register_password" name="register_password" type="password" style="width:200px" onblur="validate_register_input('password')"/>
+									<input id="register_password" name="register_password" type="password" style="width:230px" onblur="validate_register_input('password')"/>
 									<span style="color:red">* </span><span id="register_password_required" style="color:red;display:none;">Required</span>
 								</td>
 							</tr>
@@ -275,7 +275,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_phone" style="font-size:12px;">Telephone:</label>
 								</th>
 								<td>
-									<input id="register_phone" name="register_phone" type="text" style="width:200px" onblur="validate_register_input('phone')" value="<?php echo $this->get_post_data('register_phone'); ?>"/>
+									<input id="register_phone" name="register_phone" type="text" style="width:230px" onblur="validate_register_input('phone')" value="<?php echo $this->get_post_data('register_phone'); ?>"/>
 									<span style="color:red">* </span><span id="register_phone_required" style="color:red;display:none;">Required</span>
 								</td>
 							</tr>
@@ -284,7 +284,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 									<label for="register_website" style="font-size:12px;">Website:</label>
 								</th>
 								<td>
-									<input id="register_website" name="register_website" type="text" style="width:200px" value="<?php echo $this->get_post_data('register_website'); ?>"/>
+									<input id="register_website" name="register_website" type="text" style="width:230px" value="<?php echo $this->get_post_data('register_website'); ?>"/>
 								</td>
 							</tr>
 							<tr>
@@ -293,11 +293,11 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</th>
 								<td>
 									<div>
-										<input id="register_verification_code" name="register_verification_code" type="text" style="width: 120px;float: left;margin-right: 6px;" onblur="validate_register_input('verification_code')"/>
+										<input id="register_verification_code" name="register_verification_code" type="text" style="width: 150px;float: left;margin-right: 6px;" onblur="validate_register_input('verification_code')"/>
 										<span style="float: left;margin-right: 4px;">
                                             <img title="Click to change a verification code." alt="Verification Code" 
                                                 style="cursor:pointer;border: solid 1px #DFDFDF;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" 
-                                                onclick="this.src='https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';" id="register_verification_code_image" src=""/>
+                                                onclick="this.src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code&r='+(Math.random() * 100);" id="register_verification_code_image" src=""/>
                                         </span>
 										<script type="text/javascript">
 											setTimeout(function() {
