@@ -1,3 +1,7 @@
+String.prototype.trim = function()
+{
+    return this.replace(/(^[\\s]*)|([\\s]*$)/g, "");
+}
 if (typeof comm100_script_id == 'undefined')
 	comm100_script_id = 0;
 
@@ -105,7 +109,7 @@ var comm100_plugin = (function() {
 		comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
 			, function(response){
 				if (response.success) {
-					document.getElementById('site_id').value = site_id;
+					document.getElementById('site_id').value = site_id.trim();
 					document.forms['site_id_form'].submit();				
 				}
 				else {
