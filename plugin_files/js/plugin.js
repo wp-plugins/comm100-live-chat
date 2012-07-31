@@ -1,6 +1,6 @@
-String.prototype.trim = function()
+﻿String.prototype.trim = function()
 {
-    return this.replace(/(^[\\s]*)|([\\s]*$)/g, "");
+    return this.replace(/(^[\s]*)|([\s]*$)/g, "");
 }
 if (typeof comm100_script_id == 'undefined')
 	comm100_script_id = 0;
@@ -63,7 +63,7 @@ var comm100_plugin = (function() {
 
 		var edition = encodeURIComponent(document.getElementById('register_edition').value);
 		var name = encodeURIComponent(document.getElementById('register_name').value);
-		var email = encodeURIComponent(document.getElementById('register_email').value);
+		var email = encodeURIComponent(document.getElementById('register_email').value.trim());
 		var password = encodeURIComponent(document.getElementById('register_password').value);
 		var phone = encodeURIComponent(document.getElementById('register_phone').value);
 		var website = encodeURIComponent(document.getElementById('register_website').value);
@@ -101,15 +101,15 @@ var comm100_plugin = (function() {
 		document.getElementById('login_submit_img').style.display = '';
 		document.getElementById('login_submit').disabled = true;
 
-		var site_id = encodeURIComponent(document.getElementById('login_site_id').value);
-		var email = encodeURIComponent(document.getElementById('login_email').value);
+		var site_id = encodeURIComponent(document.getElementById('login_site_id').value.trim());
+		var email = encodeURIComponent(document.getElementById('login_email').value.trim());
 		var password = encodeURIComponent(document.getElementById('login_password').value);
 		var timezone = encodeURIComponent(_get_timezone());
 
 		comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
 			, function(response){
 				if (response.success) {
-					document.getElementById('site_id').value = site_id.trim();
+					document.getElementById('site_id').value = site_id;
 					document.forms['site_id_form'].submit();				
 				}
 				else {
