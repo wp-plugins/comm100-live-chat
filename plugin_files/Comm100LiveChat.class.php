@@ -25,6 +25,7 @@ class Comm100LiveChat
 	 */
 	protected $plugin_url = null;
 	protected $site_id = null;
+    protected $email = null;
 	protected $plan_id = null;
 
 	/**
@@ -79,13 +80,22 @@ class Comm100LiveChat
 
 		return $this->site_id;
 	}
+	public function get_email()
+	{
+		if (is_null($this->email))
+		{
+			$this->email = get_option('comm100livechat_email');
+		}
+
+		return $this->email;
+	}
 }
 
 class Comm100LiveChatWidget extends WP_Widget
 {
 	public function __construct() {
 		parent::__construct('comm100livechat_widget', 'Comm100 Live Chat', 
-			array('description' => 'Install Chat Button to let your visitors start a chat with you.'));
+			array('description' => 'Add a chat button to your site and start chatting with your visitors.'));
 	}
 
 	public function update( $new_instance, $old_instance ) {
@@ -108,6 +118,7 @@ class Comm100LiveChatWidget extends WP_Widget
 
 		
 		$base = Comm100LiveChat::get_instance()->get_plugin_url();
+
 ?>
 		<script type="text/javascript" src="<?php echo Comm100LiveChat::$service_url; ?>?action=session"></script>
 		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js"></script>
@@ -125,7 +136,7 @@ class Comm100LiveChatWidget extends WP_Widget
 						alert('Error: no code plan.');
 						return;
 					}
-
+                    document.getElementById('error_<?php echo  $this->get_field_id('plan_id');?>').display = 'none';
 
 					if (plans.length > 1) {
 						var list_plans = document.getElementById('select_<?php echo $this->get_field_id('plan_id'); ?>');
@@ -180,33 +191,47 @@ class Comm100LiveChatWidget extends WP_Widget
 							document.getElementById("<?php echo $this->get_field_id('code'); ?>").value = html_encode(code);
 						});
 					}
-				},200);
-			});
+				}, function(error) {
+					var error_div = document.getElementById('error_<?php echo  $this->get_field_id('plan_id');?>');
+                    error_div.innerHTML = error;
+
+					document.getElementById("loading_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+					document.getElementById("multi_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+					document.getElementById("single_plan_<?php echo $this->get_field_id('plan_id'); ?>").style.display = 'none';
+
+                    error_div.style.display = '';                
+                });
+			},200);
 		</script>
 		<div id="loading_<?php echo $this->get_field_id('plan_id'); ?>">
-			Loading...
+			<img src="<?php echo $base ?>/images/ajax_loader.gif" title="Please wait..." alt="waitting" /> Loading...
 		</div>
 		<div style="display:none;" id="multi_plan_<?php echo $this->get_field_id('plan_id'); ?>">
 			<div>
-				Select which code plan to use on my site: 
-				<select id="select_<?php echo $this->get_field_id('plan_id'); ?>" style="width:110px">
+				Select a code plan for your site: 
+				<select id="select_<?php echo $this->get_field_id('plan_id'); ?>" style="width:160px">
 				</select>
-			</div>
-			<div style="margin-top:5px;">
 				<script type="text/javascript">
 					function open_customize(plan_field_id) {
 						window.open('http://hosted.comm100.com/LiveChatFunc/PlanGeneralManage.aspx?siteId=<?php echo $site_id; ?>&ifEditPlan=true&codePlanId=' 
 							+ document.getElementById(plan_field_id).value);
 					}
 				</script>
-				Click <a href="#" onclick="open_customize('<?php echo $this->get_field_id('plan_id'); ?>');return false;" target="_blank">here</a> to customize this code plan.
+			    <a href="#" onclick="open_customize('<?php echo $this->get_field_id('plan_id'); ?>');return false;" target="_blank">Customize</a>
+			
 			</div>
 		</div>
 
 		<div style="display:none;" id="single_plan_<?php echo $this->get_field_id('plan_id'); ?>">
-			<div><a id="a_<?php echo $this->get_field_id('plan_id'); ?>" target="_blank">Customize</a> my live chat to better match the look and feel of my website.</div>
+			<div>
+                The chat button is successfully added to your site. <br/>
+                Now you can <a href="admin.php?page=comm100livechat_online">Get Online & Chat</a> or <a id="a_<?php echo $this->get_field_id('plan_id'); ?>" target="_blank">customize</a> your live chat styles.
+            </div>
 			
 		</div>
+
+        <div style="display: none;" id="error_<?php echo  $this->get_field_id('plan_id');?>"></div>
+
 		<input type="hidden" id="<?php echo $this->get_field_id('plan_id'); ?>" 
 			value="<?php echo $plan_id; ?>" name="<?php echo $this->get_field_name('plan_id'); ?>"/>
 		<input type="hidden" id="<?php echo $this->get_field_id('code'); ?>" name="<?php echo $this->get_field_name('code'); ?>"/>

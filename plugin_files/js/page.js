@@ -24,7 +24,7 @@ setTimeout(function() {
             var itemsfound = new Array;
             var elements = document.getElementsByTagName('*');
             for(var i=0;i<elements.length;i++){
-                if(elements[i].class == className){
+                if(elements[i].className == className){
                     itemsfound.push(elements[i]);
                 }
             }
@@ -42,6 +42,10 @@ setTimeout(function() {
         footer.style.display = 'none';
     }
 
+    var dolly = document.getElementById('dolly');
+    if (dolly) {
+        dolly.style.display = 'none';
+    }
     var content = document.getElementById('wpbody-content');
     if (content) {
         content.style.paddingBottom = '0px';

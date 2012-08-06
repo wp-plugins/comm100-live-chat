@@ -12,7 +12,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 	 * Plugin's version
 	 */
 	protected $plugin_version = null;
-
+    protected $show_success = FALSE;
 
 	/**
 	 * Starts the plugin
@@ -22,15 +22,20 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		parent::__construct();
 		
 		add_action('admin_menu', array($this, 'admin_menu'));
-		
+
+		//$show_success = TRUE;
+
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			if (isset($_POST['settings_reset'])) {
-				$this->reset_options();
-			}
-			elseif (isset($_POST['site_id'])) {
+			if (isset($_POST['site_id'])) {
 				$this->update_site_id($_POST['site_id']);
+				$this->update_email($_POST['email']);
+                $show_success = TRUE;
 			}
+		} else {
+			if (isset($_GET['reset'])) {
+				$this->reset_options();
+			}		    
 		}
 	}
 
@@ -88,8 +93,8 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 		add_submenu_page(
 			'comm100livechat',
-			'Settings',
-			'Settings',
+			'Account Setup',
+			'Account Setup',
 			'administrator',
 			'comm100livechat_settings',
 			array($this, 'livechat_settings_page')
@@ -97,8 +102,8 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 		add_submenu_page(
 			'comm100livechat',
-			'Online & Chat',
-			'Online & Chat',
+			'Get Online & Chat',
+			'Get Online & Chat',
 			'administrator',
 			'comm100livechat_online',
 			array($this, 'visitor_monitor_page')
@@ -106,8 +111,8 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 		add_submenu_page(
 			'comm100livechat',
-			'Control panel',
-			'Control panel',
+			'Control Panel',
+			'Control Panel',
 			'administrator',
 			'comm100livechat_control_panel',
 			array($this, 'control_panel_page')
@@ -141,60 +146,67 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		</script>
 
 		<div style="padding-top:20px;padding-left:5px;">
-			<img src="<?php echo $base ?>/images/logo.gif"/>
+			<img alt="Comm100" title="Comm100" src="<?php echo $base ?>/images/logo.gif" />
 			<span><b>100% Communication, 100% Success</b></span>
 		</div>
 		<div class="wrap">
-			<form method="POST" action="?page=comm100livechat" name="site_id_form">
+			<form method="POST" action="?page=comm100livechat&show_success=true" name="site_id_form">
 				<input type="hidden" name="site_id" id="site_id" />
+				<input type="hidden" name="email" id="email" />
 			</form>
 		<?php if (!$this->is_installed()) { ?>
 			<script type="text/javascript" src="<?php echo Comm100LiveChat::$service_url; ?>?action=session"></script>
 
 			<div id="comm100livechat_have_account" class="metabox-holder">
 				<div class="postbox">
-					<h3>Do you already have a Comm100 account?</h3>
+					<h3>Set up your Comm100 Account</h3>
 					<div class="postbox_content" style="padding-left:10px;">
 						<ul id="choice_account">
-							<li><input onclick="show_login()" type="radio" name="choice_account" id="choice_account_1" checked="checked" > <label for="choice_account_1">Yes, I already have a Comm100 account</label></li>
-							<li><input onclick="show_registger()" type="radio" name="choice_account" id="choice_account_0"> <label for="choice_account_0">No, I want to create one</label></li>
+							<li><input onclick="show_registger()" type="radio" name="choice_account" id="choice_account_0" checked="checked"> <label for="choice_account_0">Create a new account (15-day FREE trial, no credit card required)</label></li>
+							<li><input onclick="show_login()" type="radio" name="choice_account" id="choice_account_1" > <label for="choice_account_1">I already have a Comm100 account.</label></li>
 						</ul>
 					</div>
 				</div>
 			</div>
 
-			<div id="comm100livechat_login" class="metabox-holder">
+			<div id="comm100livechat_login" class="metabox-holder" style="display:none;">
 				<div class="postbox">
-					<h3>Comm100 account</h3>
+					<h3>Link up to your current Comm100 account</h3>
 					<div class="postbox_content">
 						
 						<div style="padding:10px;display:none;" id="login_error_">
-							<div style="border:1px solid #c00;background-color:#ffebe8;padding:10px;">
+							<div style="border:1px solid #c00;background-color:#ffebe8;padding:10px;border-radius: 3px;">
 								<b>Error</b>:&nbsp;<span id="login_error_text"></span>
 							</div>
 						</div>
 
 						<table class="form-table">
 							<tr>
-								<th scope="row"><label for="login_site_id" style="font-size:12px;">Site Id:</label></th>
-								<td><input type="text" name="login_site_id" id="login_site_id" value="<?php echo $this->get_post_data('login_site_id'); ?>"></td>
-								<td><a href="https://hosted.comm100.com/Admin/ForgotSiteId.aspx" target="_blank" tabindex="-1">Forgot Site Id?</a></td>
+								<th scope="row" style="width: 100px;"><label for="login_site_id" style="font-size:12px;">Site Id:</label></th>
+								<td><input type="text" style="width: 230px;" name="login_site_id" id="login_site_id" value="<?php echo $this->get_post_data('login_site_id'); ?>">
+                                    <span style="padding-left: 5px;">
+                                        <a href="https://hosted.comm100.com/Admin/ForgotSiteId.aspx" target="_blank" tabindex="-1">Forgot Site Id?</a>
+                                    </span>
+                                </td>
 							</tr>
 							<tr>
-								<th scope="row"><label for="login_email" style="font-size:12px;">Email:</label></th>
-								<td><input type="text" name="login_email" id="login_email" value="<?php echo $this->get_post_data('login_email'); ?>"></td>
+								<th scope="row" style="width: 100px;"><label for="login_email" style="font-size:12px;">Email:</label></th>
+								<td><input type="text" style="width: 230px;" name="login_email" id="login_email" value="<?php echo $this->get_post_data('login_email'); ?>"></td>
 								<td></td>
 							</tr>
 							<tr>
-								<th scope="row"><label for="login_password" style="font-size:12px;">Password:</label></th>
-								<td><input type="password" name="login_password" id="login_password"></td>
-								<td><a href="https://hosted.comm100.com/Admin/ForgotPassword.aspx" target="_blank" tabindex="-1">Forgot your password?</a></td>
+								<th scope="row" style="width: 100px;"><label for="login_password" style="font-size:12px;">Password:</label></th>
+								<td><input type="password" style="width: 230px;" name="login_password" id="login_password">
+                                    <span style="padding-left: 5px;">
+                                        <a href="https://hosted.comm100.com/Admin/ForgotPassword.aspx" target="_blank" tabindex="-1">Forgot your password?</a>
+                                    </span>
+                                </td>
 							</tr>
 						</table>
 
 						<p class="submit" style="padding-left:10px;">
 							<input type="hidden" name="login_form" value="1">
-							<input type="submit" id="login_submit" class="button-primary" name="login_submit" value="Login" 
+							<input type="submit" id="login_submit" class="button-primary" name="login_submit" value="Link Up" 
 							onclick="comm100_plugin.login();return false;">
 							<img id="login_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="waitting" style="display:none;"/>
 						</p>
@@ -202,21 +214,23 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 				</div>
 			</div>
 
-			<div id="comm100livechat_register" class="metabox-holder" style="display:none;">
-				<div class="postbox" id="comm100livechat_register_loading">Loading...</div>
+			<div id="comm100livechat_register" class="metabox-holder">
+				<div class="postbox" id="comm100livechat_register_loading" style="padding: 10px;">
+                	<img src="<?php echo $base ?>/images/ajax_loader.gif" title="Please wait..." alt="waitting" /> Loading...					
+                </div>
 				<div class="postbox" id="comm100livechat_register_content" style="display:none;">
-					<h3>Create a new Comm100 account:</h3>
+					<h3>Create a new Comm100 account</h3>
 					<div class="postbox_content">
 						<div style="padding:10px;display:none;" id="register_error">
-							<div style="border:1px solid #c00;background-color:#ffebe8;padding:10px;">
+							<div style="border:1px solid #c00;background-color:#ffebe8;padding:10px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
 								<b>Error</b>:&nbsp;<span id="register_error_text"></span>
 							</div>
 						</div>
 
 						<table class="form-table">
 							<tr>
-								<th scope="row">
-									<label for="register_edition" style="font-size:12px;">Edition: </label>
+								<th scope="row" style="width: 100px;">
+									<label for="register_edition" style="font-size:12px;">Live Chat Edition: </label>
 								</th>
 								<td>
 									<script type="text/javascript">
@@ -228,20 +242,21 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 											for (var i = 0; i < editions.length; i++) {
 												var opt = document.createElement('OPTION');
-												opt.innerHTML = editions[i].name.replace('Comm100 Live Chat ', '') + ' $' + editions[i].price + ' / month';
+												opt.innerHTML = editions[i].name.replace('Comm100 Live Chat ', '').replace('Edition', '') + ' - $' + editions[i].price + '/operator/month';
 												opt.value = editions[i].id;
-												if (16 == editions[i].id) {
+												if (37 == editions[i].id) {
 													opt.selected = 'selected';
 												}
 												list_editions.appendChild(opt);
 											};
 										});
 									</script>
-									<select id="register_edition" name="register_edition" style="width:230px"></select> (15 days free trail)
+									<select id="register_edition" name="register_edition" style="width:230px"></select> 
+                                    <span style="padding-left: 5px;"><a href="http://livechat.comm100.com/featurelist.aspx" target="_blank" style="color: inherit;">Feature Comparison</a></span>
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 100px;">
 									<label for="register_name" style="font-size:12px;">Full Name:</label>
 								</th>
 								<td>
@@ -251,7 +266,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 100px;">
 									<label for="register_email" style="font-size:12px;">Email:</label>
 								</th>
 								<td>
@@ -262,7 +277,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 100px;">
 									<label for="register_password" style="font-size:12px;">Password:</label>
 								</th>
 								<td>
@@ -271,7 +286,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 100px;">
 									<label for="register_phone" style="font-size:12px;">Telephone:</label>
 								</th>
 								<td>
@@ -280,7 +295,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 100px;">
 									<label for="register_website" style="font-size:12px;">Website:</label>
 								</th>
 								<td>
@@ -288,7 +303,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">
+								<th scope="row" style="width: 100px;">
 									<label for="register_verification_code" style="font-size:12px;">Verification Code:</label>
 								</th>
 								<td>
@@ -317,7 +332,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 							<input type="submit" id="register_submit" name="register_submit" value="Create Account" class="button-primary" onclick="if (validate_register_inputs()){comm100_plugin.register();}return false;"/>
 							<img id="register_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="Please wait..." alt="waitting" style="display:none;"/>
 						
-                            <div style="padding:5px 0 0 4px;font-size: smaller;">
+                            <div style="padding:8px 0 0 4px;font-size: smaller;">
                                 By clicking "Create Account", you agree to Comm100 <a href="http://hosted.comm100.com/admin/help/Comm100-Agreement.htm" id="aHref" target="_blank">Hosted Service Agreement</a> and <a href="http://www.comm100.com/privacy/" target="_blank">Privacy Policy</a>.
                             </div>
                         </div>
@@ -327,18 +342,40 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 		<?php } else { ?>
 			<div id="comm100livechat_settings" class="metabox-holder">
+                <div id="success" style="display:none;background-color: #E1FDC5;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; border:solid 1px #6AC611;margin: 5px 0 15px;padding: 10px 0 10px 15px;">
+                    Congratulations! Your Comm100 Live Chat account has been set up successfully.
+                </div>
+                <script type="text/javascript">
+                    setTimeout(function() {
+                        if(window.location.href.indexOf('show_success') >= 0) {
+                            var element = document.getElementById('success');
+                            if(element) {
+                                element.style.display = '';
+                            }
+                        } 
+                    }, 10);
+               </script>
 				<div class="postbox">
 				<form method="POST" action="?page=comm100livechat" name="settings_form">
-					<h3>Your live chat has been installed successfully.</h3>
+					<h3>Your Linked Comm100 Account</h3>
 					<div class="postbox_content" style="padding:10px;">
-						<div style="padding-bottom:10px;">Your Comm100 account info: Site Id: <?php echo $this->get_site_id(); ?>.</div>
-						<div style="padding-bottom:10px;">Go to the <a href="widgets.php">Widgets</a> page to activate live chat widget and set personal customizations for your own live chat.</div>
-						<div class="submit">
-							<input type="submit" name="settings_reset" value="Reset your settings" class="button-primary" onclick="if (!confirm('Are you sure you wish to reset your settings?'))return false;"/>
-						</div>
+						<div style="padding-bottom:20px;"> 
+                            <div style="padding: 10px 0 0 0px;">Site Id: <?php echo $this->get_site_id(); ?></div>
+                            <div style="padding: 10px 0 0 0px;">Email: <?php echo urldecode($this->get_email()); ?></div>
+                        </div>
+						<div style="padding-bottom:10px;">Activate Comm100 Live Chat Widget now and start chatting with your visitors!</div>
+                        <input type="button" class="button-primary" value="Activate Now" onclick="window.location.href='widgets.php'"/>
 					</div>
 				</form>
 				</div>
+				<div class="submit" style="display: none;">
+					<input type="submit" name="settings_reset" value="Reset your settings" class="button-primary"/>
+				</div>
+
+                <p style="color: #999;font-size: smaller;margin-top: -15px;">
+                    Something went wrong? <a style="color: #999;" href="?page=comm100livechat_settings&amp;reset=1" 
+                    onclick="if (!confirm('Are you sure you wish to reset your account?'))return false;">Reset your account</a>.
+                </p>
 			</div>
 		<?php } ?>
 		</div>
@@ -359,7 +396,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		    <script type="text/javascript" src="{$base}/js/page.js">
 		    </script>
 			<iframe id="control_panel" src="{$cpanel_url}" frameborder="0" width="100%" height="700"></iframe>
-			<p>Optionally, open the Control panel in an <a href="{$cpanel_url}" target="_blank">external window</a>.</p>
+			<div>You may also <a href="{$cpanel_url}" target="_blank">access the Control Panel in a new window</a>.</div>
 HTML;
 	}
     
@@ -376,7 +413,7 @@ HTML;
 		    <script type="text/javascript" src="{$base}/js/page.js">
 		    </script>
 			<iframe id="control_panel" src="{$cpanel_url}" frameborder="0" width="100%" height="700" style="margin:10px 0 0px 0"></iframe>
-			<div>Optionally, open the Control panel in an <a href="{$cpanel_url}" target="_blank">external window</a>.</div>
+			<div>You may also <a href="{$cpanel_url}" target="_blank">get online and chat in a new window</a>.</div>
 HTML;
 	}
 
@@ -397,11 +434,18 @@ HTML;
 	{
 		delete_option('comm100livechat_site_id');
 		$this->site_id = 0;
+		delete_option('comm100livechat_email');
+		$this->email = '';
 	}
 
 	protected function update_site_id($site_id)
 	{
 		update_option('comm100livechat_site_id', $site_id);
 		$this->site_id = $site_id;
+	}
+	protected function update_email($email)
+	{
+		update_option('comm100livechat_email', $email);
+		$this->email = $email;
 	}
 }

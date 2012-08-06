@@ -1,7 +1,8 @@
-﻿String.prototype.trim = function()
+String.prototype.trim = function()
 {
     return this.replace(/(^[\s]*)|([\s]*$)/g, "");
 }
+
 if (typeof comm100_script_id == 'undefined')
 	comm100_script_id = 0;
 
@@ -40,114 +41,128 @@ function comm100_script_request(params, success, error) {
 	}
 
 	var req = new request();
-	req.send('https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx' + params, success, error);
+
+	if(typeof comm100livechat_session == null) {
+        setTimeout(function() {
+	        req.send('https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx' + params, success, error);
+        }, 1000);
+	} else {
+	    req.send('https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx' + params, success, error);
+	}
 }
 
 var comm100_plugin = (function() {
-	function _onexception (msg) {
-		document.getElementById('login_submit_img').style.display = 'none';
-		document.getElementById('login_submit').disabled = false;
+    function _onexception(msg) {
+        document.getElementById('login_submit_img').style.display = 'none';
+        document.getElementById('login_submit').disabled = false;
 
-		document.getElementById('register_submit_img').style.display = 'none';
-		document.getElementById('register_submit').disabled = false;
+        document.getElementById('register_submit_img').style.display = 'none';
+        document.getElementById('register_submit').disabled = false;
 
-		alert(msg);
-	}
+        alert(msg);
+    }
 
-	function _get_timezone() {
-		return ((new Date()).getTimezoneOffset()/-60.0).toString();
-	}
-	function _register() {
-		document.getElementById('register_submit_img').style.display = '';
-		document.getElementById('register_submit').disabled = true;
+    function _get_timezone() {
+        return ((new Date()).getTimezoneOffset() / -60.0).toString();
+    }
+    function _register() {
+        document.getElementById('register_submit_img').style.display = '';
+        document.getElementById('register_submit').disabled = true;
 
-		var edition = encodeURIComponent(document.getElementById('register_edition').value);
-		var name = encodeURIComponent(document.getElementById('register_name').value);
-		var email = encodeURIComponent(document.getElementById('register_email').value.trim());
-		var password = encodeURIComponent(document.getElementById('register_password').value);
-		var phone = encodeURIComponent(document.getElementById('register_phone').value);
-		var website = encodeURIComponent(document.getElementById('register_website').value);
-		var ip = encodeURIComponent(document.getElementById('register_ip').value);
-		var timezone = encodeURIComponent(_get_timezone());
-		var verification_code = encodeURIComponent(document.getElementById('register_verification_code').value);
-		var referrer = encodeURIComponent(window.location.href);
+        var edition = encodeURIComponent(document.getElementById('register_edition').value);
+        var name = encodeURIComponent(document.getElementById('register_name').value);
+        var email = encodeURIComponent(document.getElementById('register_email').value);
+        var password = encodeURIComponent(document.getElementById('register_password').value);
+        var phone = encodeURIComponent(document.getElementById('register_phone').value);
+        var website = encodeURIComponent(document.getElementById('register_website').value);
+        var ip = encodeURIComponent(document.getElementById('register_ip').value);
+        var timezone = encodeURIComponent(_get_timezone());
+        var verification_code = encodeURIComponent(document.getElementById('register_verification_code').value);
+        var referrer = encodeURIComponent(window.location.href);
 
-		comm100_script_request('?action=register&edition=' + edition + '&name=' + name + '&email=' + email +
+        comm100_script_request('?action=register&edition=' + edition + '&name=' + name + '&email=' + email +
 			'&password=' + password + '&phone=' + phone + '&website=' + website + '&ip=' + ip + '&timezone=' + timezone + '&verificationCode=' + verification_code + '&referrer=' + referrer
-			, function(response){
-				if (response.success) {
-					document.getElementById('site_id').value = response.response;
-					document.forms['site_id_form'].submit();
-				}
-				else {
-					document.getElementById('register_error').style.display = '';
-					document.getElementById('register_error_text').innerHTML = response.error;
-					
-					document.getElementById('register_verification_code_image').src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';
-				}
-				
-				document.getElementById('register_submit_img').style.display = 'none';
-				document.getElementById('register_submit').disabled = false;
+			, function(response) {
+			    if(response.success) {
+			        document.getElementById('site_id').value = response.response;
+			        document.getElementById('email').value = email;
+			        document.forms['site_id_form'].submit();
+			    }
+			    else {
+			        document.getElementById('register_error').style.display = '';
+			        document.getElementById('register_error_text').innerHTML = response.error;
 
-		}, function(message) {
-			document.getElementById('register_submit_img').style.display = 'none';
-			document.getElementById('register_submit').disabled = false;
+			        document.getElementById('register_verification_code_image').src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';
+			    }
 
-			document.getElementById('register_error').style.display = '';
-			document.getElementById('register_error_text').innerHTML = response.error;
-		});
-	}
-	function _login() {
-		document.getElementById('login_submit_img').style.display = '';
-		document.getElementById('login_submit').disabled = true;
+			    document.getElementById('register_submit_img').style.display = 'none';
+			    document.getElementById('register_submit').disabled = false;
 
-		var site_id = encodeURIComponent(document.getElementById('login_site_id').value.trim());
-		var email = encodeURIComponent(document.getElementById('login_email').value.trim());
-		var password = encodeURIComponent(document.getElementById('login_password').value);
-		var timezone = encodeURIComponent(_get_timezone());
+			}, function(message) {
+			    document.getElementById('register_submit_img').style.display = 'none';
+			    document.getElementById('register_submit').disabled = false;
 
-		comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
-			, function(response){
-				if (response.success) {
-					document.getElementById('site_id').value = site_id;
-					document.forms['site_id_form'].submit();				
-				}
-				else {
-					document.getElementById('login_error_').style.display = '';
-					document.getElementById('login_error_text').innerHTML = response.error;
-				}
-				document.getElementById('login_submit_img').style.display = 'none';
-				document.getElementById('login_submit').disabled = false;
-		}, function(message) {
-			document.getElementById('login_submit_img').style.display = 'none';
-			document.getElementById('login_submit').disabled = false;
+			    document.getElementById('register_error').style.display = '';
+			    document.getElementById('register_error_text').innerHTML = response.error;
+			});
+    }
+    function _login() {
+        document.getElementById('login_submit_img').style.display = '';
+        document.getElementById('login_submit').disabled = true;
 
-			document.getElementById('login_error_').style.display = '';
-			document.getElementById('login_error_text').innerHTML = response.error;
-		});
-	}
-	function _get_plans(site_id, callback) {
-		comm100_script_request('?action=plans&siteId=' + site_id, function(response){
-			callback(response.response);
-		});
-	}
-	function _get_code(site_id, plan_id, callback) {
-		comm100_script_request('?action=code&siteId=' + site_id + '&planId=' + plan_id, function(response){
-			callback(response.response);
-		});
-	}
-	function _get_editions(callback) {	
-		comm100_script_request('?action=editions', function(response) {
-			callback(response.response);
-		});	
-	}
-	return {
-		register: _register,
-		login: _login,
-		get_plans: _get_plans,
-		get_code: _get_code,
-		get_editions: _get_editions
-	};
+        var site_id = encodeURIComponent(document.getElementById('login_site_id').value.trim());
+        var email = encodeURIComponent(document.getElementById('login_email').value);
+        var password = encodeURIComponent(document.getElementById('login_password').value);
+        var timezone = encodeURIComponent(_get_timezone());
+
+        comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
+			, function(response) {
+			    if(response.success) {
+			        document.getElementById('site_id').value = site_id;
+			        document.getElementById('email').value = email;
+			        document.forms['site_id_form'].submit();
+			    }
+			    else {
+			        document.getElementById('login_error_').style.display = '';
+			        document.getElementById('login_error_text').innerHTML = response.error;
+			    }
+			    document.getElementById('login_submit_img').style.display = 'none';
+			    document.getElementById('login_submit').disabled = false;
+			}, function(message) {
+			    document.getElementById('login_submit_img').style.display = 'none';
+			    document.getElementById('login_submit').disabled = false;
+
+			    document.getElementById('login_error_').style.display = '';
+			    document.getElementById('login_error_text').innerHTML = response.error;
+			});
+    }
+    function _get_plans(site_id, success, error) {
+        comm100_script_request('?action=plans&siteId=' + site_id, function(response) {
+            if(response.error) {
+                if (typeof error != 'undefined')
+                    error('Comm100 Live Chat is not added to your site yet as you haven\'t linked up any Comm100 account.<br/><a href="admin.php?page=comm100livechat_settings">Link Up your account now</a> and start chatting with your visitors.');
+            } else {
+                success(response.response);
+            }
+        });
+    }
+    function _get_code(site_id, plan_id, callback) {
+        comm100_script_request('?action=code&siteId=' + site_id + '&planId=' + plan_id, function(response) {
+            callback(response.response);
+        });
+    }
+    function _get_editions(callback) {
+        comm100_script_request('?action=editions', function(response) {
+            callback(response.response);
+        });
+    }
+    return {
+        register: _register,
+        login: _login,
+        get_plans: _get_plans,
+        get_code: _get_code,
+        get_editions: _get_editions
+    };
 })();
 
 
