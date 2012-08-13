@@ -17,7 +17,7 @@ class Comm100LiveChat
 {
 	// singleton pattern
 	protected static $instance;
-	public static $service_url = 'http://hosted.comm100.com/AdminPluginService/livechatplugin.ashx';
+	public static $service_url = 'https://hosted.comm100.com/AdminPluginService/livechatplugin.ashx';
 	//public static $service_url = 'http://192.168.8.48/plugin/livechatplugin.ashx';
 
 	/**
