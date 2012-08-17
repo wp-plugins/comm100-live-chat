@@ -8,7 +8,7 @@ Tags: live chat, chat, plugin, comm100, admin, widget, customer support, live su
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Comm100 Live Chat is the powerful live chat software that's working on over 20,000 websites. Install it NOW!
+Comm100 Live Chat is the powerful live chat software that has been embraced by over 100,000 businesses. Install it NOW!
 
 == Description ==
 
