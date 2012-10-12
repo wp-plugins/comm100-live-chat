@@ -3,6 +3,12 @@ String.prototype.trim = function()
     return this.replace(/(^[\s]*)|([\s]*$)/g, "");
 }
 
+function html_encode(html) {
+	var div=document.createElement("div");
+	var txt=document.createTextNode(html);
+	div.appendChild(txt);
+	return div.innerHTML;
+}
 if (typeof comm100_script_id == 'undefined')
 	comm100_script_id = 0;
 
@@ -80,13 +86,14 @@ var comm100_plugin = (function() {
         var verification_code = encodeURIComponent(document.getElementById('register_verification_code').value);
         var referrer = encodeURIComponent(window.location.href);
 
-        comm100_script_request('?action=register&edition=' + edition + '&name=' + name + '&email=' + email +
+        comm100_script_request('?action=register&float_button=true&edition=' + edition + '&name=' + name + '&email=' + email +
 			'&password=' + password + '&phone=' + phone + '&website=' + website + '&ip=' + ip + '&timezone=' + timezone + '&verificationCode=' + verification_code + '&referrer=' + referrer
 			, function(response) {
 			    if(response.success) {
-			        document.getElementById('site_id').value = response.response;
-			        document.getElementById('email').value = email;
-			        document.forms['site_id_form'].submit();
+			        _submit_site_form(response.response, email, function () {
+					    document.getElementById('register_submit_img').style.display = 'none';
+					    document.getElementById('register_submit').disabled = false;
+			        });
 			    }
 			    else {
 			        document.getElementById('register_error').style.display = '';
@@ -95,8 +102,8 @@ var comm100_plugin = (function() {
 			        document.getElementById('register_verification_code_image').src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';
 			    }
 
-			    document.getElementById('register_submit_img').style.display = 'none';
-			    document.getElementById('register_submit').disabled = false;
+			    //document.getElementById('register_submit_img').style.display = 'none';
+			    //document.getElementById('register_submit').disabled = false;
 
 			}, function(message) {
 			    document.getElementById('register_submit_img').style.display = 'none';
@@ -105,6 +112,17 @@ var comm100_plugin = (function() {
 			    document.getElementById('register_error').style.display = '';
 			    document.getElementById('register_error_text').innerHTML = response.error;
 			});
+    }
+    function _submit_site_form (site_id, email, success) {
+		_get_plans(site_id, function(plans) {
+			var plan_id = plans[0].id;
+			_get_code(site_id, plan_id, function(code) {
+		        document.getElementById('site_id').value = site_id;
+		        document.getElementById('email').value = email;
+		        document.getElementById('code').value = html_encode(code);
+		        document.forms['site_id_form'].submit();
+			});
+		});
     }
     function _login() {
         document.getElementById('login_submit_img').style.display = '';
@@ -118,16 +136,18 @@ var comm100_plugin = (function() {
         comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
 			, function(response) {
 			    if(response.success) {
-			        document.getElementById('site_id').value = site_id;
-			        document.getElementById('email').value = email;
-			        document.forms['site_id_form'].submit();
+			        _submit_site_form(site_id, email, function () {
+						document.getElementById('login_submit_img').style.display = 'none';
+					    document.getElementById('login_submit').disabled = false;
+			        });
 			    }
 			    else {
 			        document.getElementById('login_error_').style.display = '';
 			        document.getElementById('login_error_text').innerHTML = response.error;
+			        
+				    document.getElementById('login_submit_img').style.display = 'none';
+				    document.getElementById('login_submit').disabled = false;
 			    }
-			    document.getElementById('login_submit_img').style.display = 'none';
-			    document.getElementById('login_submit').disabled = false;
 			}, function(message) {
 			    document.getElementById('login_submit_img').style.display = 'none';
 			    document.getElementById('login_submit').disabled = false;

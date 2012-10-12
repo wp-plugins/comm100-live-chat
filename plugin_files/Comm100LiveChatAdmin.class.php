@@ -30,12 +30,14 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			if (isset($_POST['site_id'])) {
 				$this->update_site_id($_POST['site_id']);
 				$this->update_email($_POST['email']);
+				$this->update_code($_POST['code']);
                 $show_success = TRUE;
 			}
 		} else {
 			if (isset($_GET['reset'])) {
 				$this->reset_options();
-			}		    
+			}
+
 		}
 	}
 
@@ -141,6 +143,10 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		$base = Comm100LiveChat::get_instance()->get_plugin_url();
 
 		$site_id = $this->get_site_id();
+
+		$query_site_id = $_GET['siteId'];
+		$query_email = $_GET['email'];
+		
 	?>
 		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js">
 		</script>
@@ -153,23 +159,12 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			<form method="POST" action="?page=comm100livechat&show_success=true" name="site_id_form">
 				<input type="hidden" name="site_id" id="site_id" />
 				<input type="hidden" name="email" id="email" />
+				<input type="hidden" name="code" id="code" />
 			</form>
 		<?php if (!$this->is_installed()) { ?>
 			<script type="text/javascript" src="<?php echo Comm100LiveChat::$service_url; ?>?action=session"></script>
 
-			<div id="comm100livechat_have_account" class="metabox-holder">
-				<div class="postbox">
-					<h3>Set up your Comm100 Account</h3>
-					<div class="postbox_content" style="padding-left:10px;">
-						<ul id="choice_account">
-							<li><input onclick="show_registger()" type="radio" name="choice_account" id="choice_account_0" checked="checked"> <label for="choice_account_0">Create a new account (15-day FREE trial, no credit card required)</label></li>
-							<li><input onclick="show_login()" type="radio" name="choice_account" id="choice_account_1" > <label for="choice_account_1">I already have a Comm100 account.</label></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			<div id="comm100livechat_login" class="metabox-holder" style="display:none;">
+			<div id="comm100livechat_login" class="metabox-holder" >
 				<div class="postbox">
 					<h3>Link up to your current Comm100 account</h3>
 					<div class="postbox_content">
@@ -180,10 +175,19 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 							</div>
 						</div>
 
+						<div style="padding-left:10px;padding-top:10px;font-weight:bold;font-size:13px;">
+							<a id="register_link" style="text-decoration:none;" href="https://hosted.comm100.com/admin/freetrial.aspx?language=0&product=0&source=wordpress">Click here to create a new Comm100 account.</a>
+							<script type="text/javascript">
+								setTimeout(function() {
+									document.getElementById('register_link').href = 'https://hosted.comm100.com/admin/freetrial.aspx?language=0&product=0&source=wordpress&return=' + encodeURIComponent(window.location.href);
+								}, 100);
+							</script>
+						</div>
+
 						<table class="form-table">
 							<tr>
 								<th scope="row" style="width: 100px;"><label for="login_site_id" style="font-size:12px;">Site Id:</label></th>
-								<td><input type="text" style="width: 230px;" name="login_site_id" id="login_site_id" value="<?php echo $this->get_post_data('login_site_id'); ?>">
+								<td><input type="text" style="width: 230px;" name="login_site_id" id="login_site_id" value="<?php echo $query_site_id ?>">
                                     <span style="padding-left: 5px;">
                                         <a href="https://hosted.comm100.com/Admin/ForgotSiteId.aspx" target="_blank" tabindex="-1">Forgot Site Id?</a>
                                     </span>
@@ -191,7 +195,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 							</tr>
 							<tr>
 								<th scope="row" style="width: 100px;"><label for="login_email" style="font-size:12px;">Email:</label></th>
-								<td><input type="text" style="width: 230px;" name="login_email" id="login_email" value="<?php echo $this->get_post_data('login_email'); ?>"></td>
+								<td><input type="text" style="width: 230px;" name="login_email" id="login_email" value="<?php echo $query_email ?>"></td>
 								<td></td>
 							</tr>
 							<tr>
@@ -210,132 +214,6 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 							onclick="comm100_plugin.login();return false;">
 							<img id="login_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="waitting" style="display:none;"/>
 						</p>
-					</div>
-				</div>
-			</div>
-
-			<div id="comm100livechat_register" class="metabox-holder">
-				<div class="postbox" id="comm100livechat_register_loading" style="padding: 10px;">
-                	<img src="<?php echo $base ?>/images/ajax_loader.gif" title="Please wait..." alt="waitting" /> Loading...					
-                </div>
-				<div class="postbox" id="comm100livechat_register_content" style="display:none;">
-					<h3>Create a new Comm100 account</h3>
-					<div class="postbox_content">
-						<div style="padding:10px;display:none;" id="register_error">
-							<div style="border:1px solid #c00;background-color:#ffebe8;padding:10px;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-								<b>Error</b>:&nbsp;<span id="register_error_text"></span>
-							</div>
-						</div>
-
-						<table class="form-table">
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_edition" style="font-size:12px;">Live Chat Edition: </label>
-								</th>
-								<td>
-									<script type="text/javascript">
-										comm100_plugin.get_editions(function(editions) {
-											document.getElementById('comm100livechat_register_loading').style.display = 'none';
-											document.getElementById('comm100livechat_register_content').style.display = '';
-
-											var list_editions = document.getElementById('register_edition');
-
-											for (var i = 0; i < editions.length; i++) {
-												var opt = document.createElement('OPTION');
-												opt.innerHTML = editions[i].name.replace('Comm100 Live Chat ', '').replace('Edition', '') + ' - $' + editions[i].price + '/operator/month';
-												opt.value = editions[i].id;
-												if (37 == editions[i].id) {
-													opt.selected = 'selected';
-												}
-												list_editions.appendChild(opt);
-											};
-										});
-									</script>
-									<select id="register_edition" name="register_edition" style="width:230px"></select> 
-                                    <span style="padding-left: 5px;"><a href="http://livechat.comm100.com/featurelist.aspx" target="_blank" style="color: inherit;">Feature Comparison</a></span>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_name" style="font-size:12px;">Full Name:</label>
-								</th>
-								<td>
-									<input id="register_name" name="register_name" type="text" style="width:230px"
-										onblur="validate_register_input('name')" value="<?php echo $this->get_post_data('register_name'); ?>"/>
-									<span style="color:red">* </span><span id="register_name_required" style="color:red;display:none;">Required</span>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_email" style="font-size:12px;">Email:</label>
-								</th>
-								<td>
-									<input id="register_email" name="register_email" type="text" style="width:230px" onblur="validate_register_input_email('email');" value="<?php echo $this->get_post_data('register_email'); ?>"/>
-									<span style="color:red">* </span>
-									<span id="register_email_required" style="color:red;display:none;">Required</span>
-									<span id="register_email_valid" style="color:red;display:none;">Invalid Email</span>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_password" style="font-size:12px;">Password:</label>
-								</th>
-								<td>
-									<input id="register_password" name="register_password" type="password" style="width:230px" onblur="validate_register_input('password')"/>
-									<span style="color:red">* </span><span id="register_password_required" style="color:red;display:none;">Required</span>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_phone" style="font-size:12px;">Telephone:</label>
-								</th>
-								<td>
-									<input id="register_phone" name="register_phone" type="text" style="width:230px" onblur="validate_register_input('phone')" value="<?php echo $this->get_post_data('register_phone'); ?>"/>
-									<span style="color:red">* </span><span id="register_phone_required" style="color:red;display:none;">Required</span>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_website" style="font-size:12px;">Website:</label>
-								</th>
-								<td>
-									<input id="register_website" name="register_website" type="text" style="width:230px" value="<?php echo $this->get_post_data('register_website'); ?>"/>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;">
-									<label for="register_verification_code" style="font-size:12px;">Verification Code:</label>
-								</th>
-								<td>
-									<div>
-										<input id="register_verification_code" name="register_verification_code" type="text" style="width: 150px;float: left;margin-right: 6px;" onblur="validate_register_input('verification_code')"/>
-										<span style="float: left;margin-right: 4px;">
-                                            <img title="Click to change a verification code." alt="Verification Code" 
-                                                style="cursor:pointer;border: solid 1px #DFDFDF;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" 
-                                                onclick="this.src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code&r='+(Math.random() * 100);" id="register_verification_code_image" src=""/>
-                                        </span>
-										<script type="text/javascript">
-											setTimeout(function() {
-												document.getElementById('register_verification_code_image').src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';
-											}, 100);
-										</script>
-										
-										<input id="register_ip" type="hidden" value="<?php echo $_SERVER['REMOTE_ADDR']?>"/>
-
-										<span style="color:red">* </span><span id="register_verification_code_required" style="color:red;display:none;">Required</span>
-									</div>
-								</td>
-							</tr>
-						</table>
-
-						<div class="submit" style="padding-left:10px;">
-							<input type="submit" id="register_submit" name="register_submit" value="Create Account" class="button-primary" onclick="if (validate_register_inputs()){comm100_plugin.register();}return false;"/>
-							<img id="register_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="Please wait..." alt="waitting" style="display:none;"/>
-						
-                            <div style="padding:8px 0 0 4px;font-size: smaller;">
-                                By clicking "Create Account", you agree to Comm100 <a href="http://hosted.comm100.com/admin/help/Comm100-Agreement.htm" id="aHref" target="_blank">Hosted Service Agreement</a> and <a href="http://www.comm100.com/privacy/" target="_blank">Privacy Policy</a>.
-                            </div>
-                        </div>
 					</div>
 				</div>
 			</div>
@@ -363,8 +241,8 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
                             <div style="padding: 10px 0 0 0px;">Site Id: <?php echo $this->get_site_id(); ?></div>
                             <div style="padding: 10px 0 0 0px;">Email: <?php echo urldecode($this->get_email()); ?></div>
                         </div>
-						<div style="padding-bottom:10px;">Activate Comm100 Live Chat Widget now and start chatting with your visitors!</div>
-                        <input type="button" class="button-primary" value="Activate Now" onclick="window.location.href='widgets.php'"/>
+						<div style="padding-bottom:10px;display:none;">Activate Comm100 Live Chat Widget now and start chatting with your visitors!</div>
+                        <input type="button" class="button-primary" style="display:none;" value="Activate Now" onclick="window.location.href='widgets.php'"/>
 					</div>
 				</form>
 				</div>
@@ -436,6 +314,8 @@ HTML;
 		$this->site_id = 0;
 		delete_option('comm100livechat_email');
 		$this->email = '';
+		delete_option('comm100livechat_code');
+		$this->code = '';
 	}
 
 	protected function update_site_id($site_id)
@@ -447,5 +327,10 @@ HTML;
 	{
 		update_option('comm100livechat_email', $email);
 		$this->email = $email;
+	}
+	protected function update_code($code)
+	{
+		update_option('comm100livechat_code', $code);
+		$this->code = $code;
 	}
 }
