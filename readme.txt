@@ -3,7 +3,7 @@ Plugin Name: Comm100 Live Chat
 Contributors: Comm100
 Requires at least: 3.0
 Tested up to: 3.4
-Stable tag: 1.0
+Stable tag: 2.0
 Tags: live chat, chat, plugin, comm100, admin, widget, customer support, live support, wordpress plugin, live help, wordpress chat
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,8 +41,7 @@ Using the WordPress chat plugin, you can quickly get live chat up and runing fol
 
 1. Install Comm100 Live Chat onto your WordPress site.
 1. Click on the 'Live Chat' menu on the left.
-1. Register for Comm100 Live Chat or directly link up your existing live chat account.
-1. Go to the 'Widgets' page to activate the live chat widget and customize your live chat styles.
+1. Link up your Comm100 Live Chat account. Register one if you haven't.
 1. Click 'Get Online & Chat' to start a live chat with your website/blog visitors. 
 
 For more detailed live chat installation instructions, please refer to [Comm100 Live Chat WordPress Chat Plugin Setup Guide](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=376 "Free WordPress Chat Plugin Setup Guide").
@@ -76,3 +75,17 @@ Yes. You can add unlimited operators into your live chat account. For how to add
 = Where can I get help if I have more questions about live chat? =
 
 Our dedicated live chat support team are always standing by to help you along the way. Please visit our online [help desk](http://hosted.comm100.com/HelpDesk/Main/Main.aspx?siteid=10000 "Comm100 Help Desk Portal") for any support related with Comm100 Live Chat.
+
+== Changelog ==
+
+= 2.0 =
+*Move the account signup process out of WordPress, per WordPress' guidelines.
+*Change the chat button to a float one. No need to add a widget.
+
+= 1.2 =
+*Greatly improved the user experience.
+*Added the "Get Online & Chat" menu.
+
+= 1.1 =
+*Fixed a critical bug.
+*Added Frequently Asked Questions.
