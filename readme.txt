@@ -79,13 +79,13 @@ Our dedicated live chat support team are always standing by to help you along th
 == Changelog ==
 
 = 2.0 =
-*Move the account signup process out of WordPress, per WordPress' guidelines.
-*Change the chat button to a float one. No need to add a widget.
+* Move the account signup process out of WordPress, per WordPress' guidelines.
+* Change the chat button to a float one. No need to add a widget.
 
 = 1.2 =
-*Greatly improved the user experience.
-*Added the "Get Online & Chat" menu.
+* Greatly improved the user experience.
+* Added the "Get Online & Chat" menu.
 
 = 1.1 =
-*Fixed a critical bug.
-*Added Frequently Asked Questions.
+* Fixed a critical bug.
+* Added Frequently Asked Questions.
