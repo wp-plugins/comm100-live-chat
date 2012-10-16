@@ -119,7 +119,7 @@ var comm100_plugin = (function() {
 			_get_code(site_id, plan_id, function(code) {
 		        document.getElementById('site_id').value = site_id;
 		        document.getElementById('email').value = email;
-		        document.getElementById('code').value = html_encode(code);
+		        document.getElementById('code').value = code;
 		        document.forms['site_id_form'].submit();
 			});
 		});

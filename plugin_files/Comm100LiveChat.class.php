@@ -39,7 +39,7 @@ class Comm100LiveChat
 
 	public function write_button_code()
 	{
-		echo html_entity_decode($this->get_code());
+		echo str_replace('\\"', '"', $this->get_code());
 	}
 
 	public static function get_instance()
