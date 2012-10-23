@@ -1,6 +1,6 @@
 === Plugin Name ===
 Plugin Name: Comm100 Live Chat
-Contributors: comm100
+Contributors: Comm100Corp
 Requires at least: 3.0
 Tested up to: 3.4
 Stable tag: 2.0
