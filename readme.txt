@@ -39,7 +39,8 @@ For more detailed live chat installation instructions, please refer to [Comm100 
 
 Using the WordPress chat plugin, you can quickly get live chat up and runing following the steps below.
 
-1. Install Comm100 Live Chat onto your WordPress site.
+1. Log into your WordPress admin panel and go to the 'Plugins' menu.
+1. Click 'Add New' to install Comm100 Live Chat onto your WordPress site either by searching Comm100 Live Chat in the plugin directory or by uploading the .zip file you have downloaded from WordPress.org.
 1. Click on the 'Live Chat' menu on the left.
 1. Link up your Comm100 Live Chat account. Register one if you haven't.
 1. Click 'Get Online & Chat' to start a live chat with your website/blog visitors. 
