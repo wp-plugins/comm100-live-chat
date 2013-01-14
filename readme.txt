@@ -29,11 +29,10 @@ Its free WordPress chat plugin is specifically designed for you to quickly insta
 **Why Comm100 Live Chat?**
 
 *  Industry Leading Live Chat Feature Set - Full live chat customization, intelligent live chat invitation, live visitor monitor & tracking, comprehensive live chat reports, customer rating and anything else you ever imagine in live chat software are all available with Comm100 Live Chat.[Take a tour](http://livechat.comm100.com/features.aspx "Live Chat Feature Tour")
-*  Multiple Live Chat Mobile Apps - Comm100 [Live Chat](http://livechat.comm100.com/ "Live Chat Software") offers multiple free mobile live chat apps for iPhone, Android, BlackBerry, Window Mobile, Symbian & other Java-based platforms.Take live chat while on the go.Learn more about [Live Chat for Mobile](http://livechat.comm100.com/mobilechat.aspx "Live Chat for Mobile")
+*  Multiple Live Chat Mobile Apps - Comm100 [Live Chat](http://livechat.comm100.com/ "Live Chat Software") offers multiple mobile live chat apps for iPhone, iPad, Android devices and BlackBerry phones.Take live chat while on the go. Learn more about [Live Chat for Mobile](http://livechat.comm100.com/mobilechat.aspx "Live Chat for Mobile")
 *  High Live Chat Stability & Security - We employ industry-leading technology and infrastructure to deliver maximum security, redundancy and performance capability for your live chat. And as a licensee of TRUSTe, we are committed to protecting your live chat information privacy. 
 *  Live Chat Integration with Ticket & Help Desk - The integration with ticket software allows you to attach live chat transcripts or offline messages to tickets. The integration with help desk software enables visitors to request a live chat directly from your help desk.
 
-For more detailed live chat installation instructions, please refer to [Comm100 Live Chat WordPress Chat Plugin Setup Guide](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=376 "Free WordPress Chat Plugin Setup Guide").
 
 == Installation ==
 
@@ -45,7 +44,6 @@ Using the WordPress chat plugin, you can quickly get live chat up and runing fol
 1. Link up your Comm100 Live Chat account. Register one if you haven't.
 1. Click 'Get Online & Chat' to start a live chat with your website/blog visitors. 
 
-For more detailed live chat installation instructions, please refer to [Comm100 Live Chat WordPress Chat Plugin Setup Guide](http://hosted.comm100.com/KnowledgeBase/Article.aspx?siteId=10000&id=376 "Free WordPress Chat Plugin Setup Guide").
 
 == Frequently Asked Questions ==
 
