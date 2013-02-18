@@ -268,9 +268,6 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 	{
 		$site_id = $this->get_site_id();
 		$cpanel_url = "https://hosted.comm100.com/adminmanage/login.aspx?apptype=1";
-		if ($site_id > 0) {
-			$cpanel_url = $cpanel_url . "&siteId=" . $site_id;
-		}
         
 		$base = Comm100LiveChat::get_instance()->get_plugin_url();
 
