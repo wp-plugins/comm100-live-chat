@@ -2,7 +2,7 @@
 Plugin Name: Comm100 Live Chat - Chat Plugin for WordPress
 Contributors: Comm100Corp
 Requires at least: 3.0
-Tested up to: 3.4
+Tested up to: 3.5.1
 Stable tag: 2.1
 Tags: live chat, chat, plugin, comm100, admin, widget, customer support, live support, wordpress plugin, live help, wordpress chat
 License: GPLv2 or later
@@ -78,8 +78,8 @@ Our dedicated live chat support team are always standing by to help you along th
 == Changelog ==
 
 = 2.1 =
-* Improved the user experience for linking up Account.
-* Enable user to add static chat button(s) via widget.
+* Improved the user experience for account setup.
+* Enabled users to add a static chat button via widget.
 
 = 2.0 =
 * Move the account signup process out of WordPress, per WordPress' guidelines.
