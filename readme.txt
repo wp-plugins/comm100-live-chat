@@ -78,8 +78,8 @@ Our dedicated live chat support team are always standing by to help you along th
 == Changelog ==
 
 = 2.1 =
-*Improved the user experience for linking up Account.
-*Enable user to add static chat button(s) via widget.
+* Improved the user experience for linking up Account.
+* Enable user to add static chat button(s) via widget.
 
 = 2.0 =
 * Move the account signup process out of WordPress, per WordPress' guidelines.
