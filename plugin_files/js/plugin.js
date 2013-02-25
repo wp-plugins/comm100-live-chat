@@ -113,47 +113,47 @@ var comm100_plugin = (function() {
 			    document.getElementById('register_error_text').innerHTML = response.error;
 			});
     }
-    function _submit_site_form (site_id, email, success) {
-		_get_plans(site_id, function(plans) {
-			var plan_id = plans[0].id;
-			_get_code(site_id, plan_id, function(code) {
-		        document.getElementById('site_id').value = site_id;
-		        document.getElementById('email').value = email;
-		        document.getElementById('code').value = code;
-		        document.forms['site_id_form'].submit();
-			});
-		});
+    function _submit_site_form (site_id, email, plan_id, plan_type) {
+        document.getElementById('site_id').value = site_id;
+        document.getElementById('email').value = email;
+        document.getElementById('plan_id').value = plan_id;
+        document.getElementById('plan_type').value = plan_type;
+        document.forms['site_id_form'].submit();
     }
-    function _login() {
-        document.getElementById('login_submit_img').style.display = '';
-        document.getElementById('login_submit').disabled = true;
-
-        var site_id = encodeURIComponent(document.getElementById('login_site_id').value.trim());
-        var email = encodeURIComponent(document.getElementById('login_email').value);
+    function _get_plan_type(plan) {
+    	if (plan.button_type == 2) {
+    		return 0;  //monitor
+    	} else if (plan.button_type == 0 && plan.button_float) /*float*/ {
+    		return 1; //float image
+    	} else {
+    		return 2; //others,  need widget
+    	}
+    }
+    function _login(success, error) {
+		var email = encodeURIComponent(document.getElementById('login_email').value);
         var password = encodeURIComponent(document.getElementById('login_password').value);
         var timezone = encodeURIComponent(_get_timezone());
 
+        var site_id = encodeURIComponent(document.getElementById('site_id').value.trim());
+        document.getElementById('email').value = email;
+        
         comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
 			, function(response) {
 			    if(response.success) {
-			        _submit_site_form(site_id, email, function () {
-						document.getElementById('login_submit_img').style.display = 'none';
-					    document.getElementById('login_submit').disabled = false;
-			        });
+			    	_get_plans(site_id, function(response) {
+			    		var plans = response;
+			    		if (plans.length == 1) {
+					        _submit_site_form(site_id, email, plans[0].id, _get_plan_type(plans[0]));
+				    	} else {
+				    		_show_plans(plans);
+				    	}
+			    	});
 			    }
 			    else {
-			        document.getElementById('login_error_').style.display = '';
-			        document.getElementById('login_error_text').innerHTML = response.error;
-			        
-				    document.getElementById('login_submit_img').style.display = 'none';
-				    document.getElementById('login_submit').disabled = false;
+				    error(response.error);
 			    }
 			}, function(message) {
-			    document.getElementById('login_submit_img').style.display = 'none';
-			    document.getElementById('login_submit').disabled = false;
-
-			    document.getElementById('login_error_').style.display = '';
-			    document.getElementById('login_error_text').innerHTML = response.error;
+				error(response.message);
 			});
     }
     function _get_plans(site_id, success, error) {
@@ -166,6 +166,21 @@ var comm100_plugin = (function() {
             }
         });
     }
+
+    function _show_plans(plans) {
+		var html = '<select style="width:300px;" id="settings_select_plans_control" onchange="settings_select_change();"><option value="0">--select a code plan--</option>';
+		for (var i= 0, len=plans.length; i<len; i++) {
+    		var p = plans[i];			
+
+			html += '<option value="'+p.id+'_'+_get_plan_type(p)+'">'+p.name+'</option>'
+    	}
+		html += '</select>';
+
+		document.getElementById('settings_select_plans').innerHTML = html;
+    	show_element('comm100livechat_choose_plan');
+    	hide_element('comm100livechat_choose_site');
+    	hide_element('comm100livechat_login');
+    }
     function _get_code(site_id, plan_id, callback) {
         comm100_script_request('?action=code&siteId=' + site_id + '&planId=' + plan_id, function(response) {
             callback(response.response);
@@ -176,12 +191,95 @@ var comm100_plugin = (function() {
             callback(response.response);
         });
     }
+
+    function _show_sites(sites) {
+    	var html = ''
+    	for (var i = 0, len = sites.length; i < len; i++) {
+    		var s = sites[i];
+
+    		html += '<div style="padding: 0 0 15px 0"><input name="comm100site" type="radio" id="site'+s.id+'"';
+    		html += ' onclick="document.getElementById(\'site_id\').value='+s.id+';"';
+    		if (i == 0) html += 'checked ';
+    		html += '/> <label for="site'+s.id+'">Site Id: <span style="color: #000;font-weight: bold;font-size: larger;">';
+    		html += s.id;
+    		if (s.inactive) html+= '<span style="color: red; font-size: x-small;padding: 0 0 3px 3px;">(Inactive)</span>';
+    		html += '</span><span style="padding: 0 0 0 7px;">Last Login: ';
+    		html += s.last_login_time;
+    		html += '</span><span style="padding: 0 0 0 7px;">Account Created: '
+    		html += s.register_time + '</span></label></div>';
+    	}
+
+    	document.getElementById('login_sites').innerHTML = html;
+
+    	hide_element('comm100livechat_login');
+    	hide_element('comm100livechat_choose_plan');
+    	show_element('comm100livechat_choose_site');
+
+    	document.getElementById('num_sites').innerHTML = sites.length;
+    }
+    function _choose_site() {
+        show_element('choose_site_submit_img');
+        document.getElementById('choose_site_submit').disabled = true;
+
+        _login(function () {
+	        hide_element('choose_site_submit_img');
+	        document.getElementById('choose_site_submit').disabled = false;
+        }, function (error) {
+	        hide_element('choose_site_submit_img');
+	        document.getElementById('choose_site_submit').disabled = false;
+
+		    document.getElementById('choose_site_error_').style.display = '';
+		    document.getElementById('choose_site_error_text').innerHTML = error;        	
+        })
+    }
+
+    function _sites () {
+        show_element('login_submit_img');
+        document.getElementById('login_submit').disabled = true;
+
+    	var email = encodeURIComponent(document.getElementById('login_email').value);
+        var password = encodeURIComponent(document.getElementById('login_password').value);
+        
+    	comm100_script_request('?action=sites&email='+email+'&password='+password+'&timezoneoffset='+(new Date()).getTimezoneOffset(), 
+    	function (response) {
+    		if (response.success) {
+    			var sites = response.response;
+    			if (sites.length == 0) {
+    				return;
+    			}
+
+    			document.getElementById('site_id').value = sites[0].id;
+    			if (sites.length > 1) {
+    				_show_sites(response.response);
+    			} else {
+			        _login(function () {
+				        hide_element('login_submit_img');
+				        document.getElementById('login_submit').disabled = false;
+			        }, function (error) {
+				        hide_element('login_submit_img');
+				        document.getElementById('login_submit').disabled = false;
+
+					    document.getElementById('login_error_').style.display = '';
+					    document.getElementById('login_error_text').innerHTML = error;        	
+			        })
+    			}
+    		} else {
+		        show_element('login_error_');
+		        document.getElementById('login_error_text').innerHTML = response.error;
+		        
+			    hide_element('login_submit_img');
+			    document.getElementById('login_submit').disabled = false;
+			}
+    	});
+    }
     return {
         register: _register,
         login: _login,
         get_plans: _get_plans,
         get_code: _get_code,
-        get_editions: _get_editions
+        get_editions: _get_editions,
+        sites: _sites,
+        choose_site: _choose_site,
     };
 })();
 
@@ -264,4 +362,25 @@ function validate_register_inputs() {
 	}
 
 	return pass;
+}
+
+function settings_select_change() {
+	var selected = settings_get_selected_plan();
+	document.getElementById('plan_id').value=selected.val;
+	document.getElementById('plan_type').value=selected.type;
+}
+function settings_get_selected_plan() {
+	var sel = document.getElementById('settings_select_plans_control');
+	if (sel != null) {
+		var options = document.getElementsByTagName('OPTION');
+		for (var i = options.length - 1; i >= 0; i--) {
+			var opt = options[i];
+			if (opt.selected) {
+				var vals = opt.value.split('_');
+				return { 'val':  vals[0], 'type': vals[1]};
+			}
+		}
+	}
+
+	return { 'val': '0', 'type': '0'}
 }

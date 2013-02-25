@@ -17,8 +17,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 	/**
 	 * Starts the plugin
 	 */
-	protected function __construct()
-	{
+	protected function __construct() {
 		parent::__construct();
 		
 		add_action('admin_menu', array($this, 'admin_menu'));
@@ -30,14 +29,14 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			if (isset($_POST['site_id'])) {
 				$this->update_site_id($_POST['site_id']);
 				$this->update_email($_POST['email']);
-				$this->update_code($_POST['code']);
+				$this->update_plan_id($_POST['plan_id']);
+				$this->update_plan_type($_POST['plan_type']);
                 $show_success = TRUE;
 			}
 		} else {
 			if (isset($_GET['reset'])) {
 				$this->reset_options();
 			}
-
 		}
 	}
 
@@ -148,7 +147,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		$query_email = $_GET['email'];
 		
 	?>
-		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js">
+		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js?v=1">
 		</script>
 
 		<div style="padding-top:20px;padding-left:5px;">
@@ -159,6 +158,8 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			<form method="POST" action="?page=comm100livechat&show_success=true" name="site_id_form">
 				<input type="hidden" name="site_id" id="site_id" />
 				<input type="hidden" name="email" id="email" />
+				<input type="hidden" name="plan_id" id="plan_id" value="0" />
+				<input type="hidden" name="plan_type" id="plan_type" />
 				<input type="hidden" name="code" id="code" />
 			</form>
 		<?php if (!$this->is_installed()) { ?>
@@ -166,7 +167,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 
 			<div id="comm100livechat_login" class="metabox-holder" >
 				<div class="postbox">
-					<h3>Link up to your current Comm100 account</h3>
+					<h3>Set up Your Comm100 Live Chat</h3>
 					<div class="postbox_content">
 						
 						<div style="padding:10px;display:none;" id="login_error_">
@@ -175,50 +176,102 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 							</div>
 						</div>
 
-						<div style="padding-left:10px;padding-top:10px;font-weight:bold;font-size:13px;">
-							<a id="register_link" style="text-decoration:none;" href="https://hosted.comm100.com/admin/freetrial.aspx?language=0&product=0&source=wordpress">Click here to create a new Comm100 account.</a>
-							<script type="text/javascript">
-								setTimeout(function() {
-									document.getElementById('register_link').href = 'https://hosted.comm100.com/admin/freetrial.aspx?language=0&product=0&source=wordpress&return=' + encodeURIComponent(window.location.href);
-								}, 100);
-							</script>
+						<div style="padding:10px 0 10px 10px;">
+							<input id="login1" type="radio" name="login" onclick="document.getElementById('login_new').style.display='block';document.getElementById('login_old').style.display='none';" 
+							<?php if (!isset($_GET['email'])) echo 'checked="checked"'; ?> />
+							<label for="login1" style="padding-left:0px;">I'm new to Comm100</label>
 						</div>
 
-						<table class="form-table">
-							<tr>
-								<th scope="row" style="width: 100px;"><label for="login_site_id" style="font-size:12px;">Site Id:</label></th>
-								<td><input type="text" style="width: 230px;" name="login_site_id" id="login_site_id" value="<?php echo $query_site_id ?>">
-                                    <span style="padding-left: 5px;">
-                                        <a href="https://hosted.comm100.com/Admin/ForgotSiteId.aspx" target="_blank" tabindex="-1">Forgot Site Id?</a>
-                                    </span>
-                                    <div style="padding-left:5px;width: 400px;background-color: #FFFBCC;  border: solid 1px #E6DB55;  color: #555;margin-top: 5px;">where to get my site Id: log into your Comm100 account, click Account, click Others, click Site Profile and then you will find your site Id number.</div>
-                                </td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;"><label for="login_email" style="font-size:12px;">Email:</label></th>
-								<td><input type="text" style="width: 230px;" name="login_email" id="login_email" value="<?php echo $query_email ?>"></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th scope="row" style="width: 100px;"><label for="login_password" style="font-size:12px;">Password:</label></th>
-								<td><input type="password" style="width: 230px;" name="login_password" id="login_password">
-                                    <span style="padding-left: 5px;">
-                                        <a href="https://hosted.comm100.com/Admin/ForgotPassword.aspx" target="_blank" tabindex="-1">Forgot your password?</a>
-                                    </span>
-                                </td>
-							</tr>
-						</table>
+                        <div style="padding: 5px 0 0 30px;<?php if (isset($_GET['email'])) echo 'display:none;'; ?>" id="login_new">
+                        	<input type="submit" value="Sign Up" class="button-primary" onclick="window.location.href='https://hosted.comm100.com/admin/freetrial.aspx?language=0&product=0&source=wordpress&return=' + encodeURIComponent(window.location.href)"/>
+                        </div>
 
-						<p class="submit" style="padding-left:10px;">
-							<input type="hidden" name="login_form" value="1">
-							<input type="submit" id="login_submit" class="button-primary" name="login_submit" value="Link Up" 
-							onclick="comm100_plugin.login();return false;">
-							<img id="login_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="waitting" style="display:none;"/>
-						</p>
+						<div style="padding:15px 0 10px 10px;">				
+							<input id="login2" <?php if (isset($_GET['email'])) echo 'checked="checked"'; ?>
+							 type="radio" name="login" onclick="document.getElementById('login_new').style.display='none';document.getElementById('login_old').style.display='block';"/>
+							<label for="login2">I already have a Comm100 Live Chat account</label>
+						</div>
+						<div id="login_old" style="padding:0 0 0 25px;<?php if (!isset($_GET['email'])) echo 'display:none;'; ?>">
+							<table class="form-table">
+							<!-- 	<tr>
+									<th scope="row" style="width: 100px;"><label for="login_site_id" style="font-size:12px;">Site ID:</label></th>
+									<td><input type="text" style="width: 230px;" name="login_site_id" id="login_site_id" value="<?php echo $query_site_id ?>"></td>
+									<td></td>
+								</tr> -->
+								<tr>
+									<th scope="row" style="width: 100px;"><label for="login_email" style="font-size:12px;">Email:</label></th>
+									<td><input type="text" style="width: 230px;" name="login_email" id="login_email" value="<?php echo $query_email ?>"></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th scope="row" style="width: 100px;"><label for="login_password" style="font-size:12px;">Password:</label></th>
+									<td><input type="password" style="width: 230px;" name="login_password" id="login_password">
+	                                    <span style="padding-left: 5px;">
+	                                        <a href="https://hosted.comm100.com/Admin/ForgotPassword.aspx" target="_blank" tabindex="-1">Forgot your password?</a>
+	                                    </span>
+	                                </td>
+								</tr>
+							</table>
+
+							<p class="submit" style="padding-left:10px;">
+								<input type="hidden" name="login_form" value="1">
+								<input type="submit" id="login_submit" class="button-primary" name="login_submit" value="Link Up" 
+									onclick="comm100_plugin.sites();return false;">
+								<img id="login_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="waitting" style="display:none;"/>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
 
+			<div id="comm100livechat_choose_site" class="metabox-holder" style="display:none;">
+                 <div class="postbox">   
+				    <h3>There are 
+				    	<span style="color: #EFC44C;font-weight: bold;font-size: larger;" id="num_sites"></span> 
+				    	accounts associated with this operator email. Please choose one to link up.
+				    </h3>
+				    <div class="postbox_content" style="padding:0px 0 10px 20px;">            		
+						<div style="padding:10px;display:none;" id="choose_site_error_">
+							<div style="border:1px solid #c00;background-color:#ffebe8;padding:10px;border-radius: 3px;">
+								<b>Error</b>:&nbsp;<span id="choose_site_error_text"></span>
+							</div>
+						</div>
+                        <div style="color: #464646;padding: 20px 0 10px 0" id="login_sites">
+                        </div>
+						<p class="submit" style="padding:5px 0 0 0;">
+							<input type="submit" id="choose_site_submit" class="button-primary" name="login_submit" value="Link Up" 
+								onclick="comm100_plugin.choose_site();return false;">
+							<img id="choose_site_submit_img" src="<?php echo $base ?>/images/ajax_loader.gif" title="waitting" style="display:none;"/>
+						</p>
+				    </div>
+                </div>
+            </div>
+
+            <div class="metabox-holder" id="comm100livechat_choose_plan" style="display:none;">
+            	<div class="postbox">
+					<h3>Select a Code Plan</h3>
+					<div class="postbox_content" style="padding:15px 10px 10px 10px;">
+	                    We noticed that you have multiple code plans in your Comm100 account. Please select one for this site.
+	                    <div style="padding: 6px 0 10px 0px;" id="settings_select_plans">
+	                    </div>
+
+	                    <input type="hidden" value="<?php echo $this->get_plan_id()?>" name="plan_id" id="settings_plan_id"/>
+	                    <input type="hidden" value="" name="plan_type" id="settings_plan_type"/>
+	     				<script type="text/javascript">
+	     					function all_submit_click() {
+	     						var plan = document.getElementById('plan_id').value;
+	     						if ((plan == '0') || (plan == '')) {
+	     							alert('Please select a code plan.');
+	     							return false;
+	     						}
+	     						document.forms['site_id_form'].submit();
+	     						return true;
+	     					}
+	     				</script>
+	                    <input type="button" onclick="return all_submit_click();" class="button-primary" value="Save"/>
+					</div>
+				</div>
+            </div>
 		<?php } else { ?>
 			<div id="comm100livechat_settings" class="metabox-holder">
                 <div id="success" style="display:none;background-color: #E1FDC5;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px; border:solid 1px #6AC611;margin: 5px 0 15px;padding: 10px 0 10px 15px;">
@@ -235,20 +288,37 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
                     }, 10);
                </script>
 				<div class="postbox">
-				<form method="POST" action="?page=comm100livechat" name="settings_form">
 					<h3>Your Linked Comm100 Account</h3>
 					<div class="postbox_content" style="padding:10px;">
-						<div style="padding-bottom:20px;"> 
-                            <div style="padding: 10px 0 0 0px;">Site Id: <?php echo $this->get_site_id(); ?></div>
+						<div style="padding-bottom:10px;"> 
+                            <!-- <div style="padding: 10px 0 0 0px;display:none;">Site Id: <?php echo $this->get_site_id(); ?></div> -->
                             <div style="padding: 10px 0 0 0px;">Email: <?php echo urldecode($this->get_email()); ?></div>
                         </div>
-						<div style="padding-bottom:10px;display:none;">Activate Comm100 Live Chat Widget now and start chatting with your visitors!</div>
-                        <input type="button" class="button-primary" style="display:none;" value="Activate Now" onclick="window.location.href='widgets.php'"/>
+                        <div style="padding:10px 0 10px 0;<?php if ($this->get_plan_type()==2) echo 'display:none;';?>">
+                        	Now you can:
+					    	<ol>
+					    		<li>
+					    			<a target="_blank" href="<?php echo get_site_url(); ?>">
+					    				See how the chat button looks on your site
+					    			</a>
+					    		</li>
+					    		<li>
+					    			<a target="_blank" href="https://hosted.comm100.com/LiveChat/VisitorMonitor.aspx?siteId=<?php echo Comm100LiveChat::get_instance()->get_site_id(); ?>">
+					    				Get online and chat with your visitors
+					    			</a>
+					    		</li>
+					    		<li>
+					    			<a target="_blank" href="http://hosted.comm100.com/LiveChatFunc/PlanDetailManage.aspx?codePlanId=<?php echo Comm100LiveChat::get_instance()->get_plan_id()?>&ifEditPlan=true&siteid=<?php echo Comm100LiveChat::get_instance()->get_site_id()?>">
+					    				Customize your live chat
+					    			</a>
+					    		</li>
+					    	</ol>
+                        </div>
+                        <div style="<?php if ($this->get_plan_type()!=2) echo 'display:none;';?>">
+							<div style="padding:10px 0 10px 0;">Activate the Comm100 Live Chat widget now and start chatting with your visitors!</div>
+                        	<input type="button" class="button-primary" style="" value="Activate Now" onclick="window.location.href='widgets.php'"/>
+                    	</div>
 					</div>
-				</form>
-				</div>
-				<div class="submit" style="display: none;">
-					<input type="submit" name="settings_reset" value="Reset your settings" class="button-primary"/>
 				</div>
 
                 <p style="color: #999;font-size: smaller;margin-top: -15px;">
@@ -256,6 +326,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
                     onclick="if (!confirm('Are you sure you wish to reset your account?'))return false;">Reset your account</a>.
                 </p>
 			</div>
+            
 		<?php } ?>
 		</div>
 <?php
@@ -317,6 +388,10 @@ HTML;
 		$this->email = '';
 		delete_option('comm100livechat_code');
 		$this->code = '';
+		delete_option('comm100livechat_plan_id');
+		$this->plan_id = 0;
+		delete_option('comm100livechat_plan_type');
+		$this->plan_type = 0;
 	}
 
 	protected function update_site_id($site_id)
@@ -333,5 +408,15 @@ HTML;
 	{
 		update_option('comm100livechat_code', $code);
 		$this->code = $code;
+	}
+	protected function update_plan_id($plan_id)
+	{
+		update_option('comm100livechat_plan_id', $plan_id);
+		$this->plan_id = $plan_id;
+	}
+	protected function update_plan_type($plan_type)
+	{
+		update_option('comm100livechat_plan_type', $plan_type);
+		$this->plan_type = $plan_type;
 	}
 }

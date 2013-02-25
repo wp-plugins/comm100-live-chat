@@ -3,7 +3,7 @@ Plugin Name: Comm100 Live Chat - Chat Plugin for WordPress
 Contributors: Comm100Corp
 Requires at least: 3.0
 Tested up to: 3.4
-Stable tag: 2.0
+Stable tag: 2.1
 Tags: live chat, chat, plugin, comm100, admin, widget, customer support, live support, wordpress plugin, live help, wordpress chat
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -76,6 +76,10 @@ Yes. You can add unlimited operators into your live chat account. For how to add
 Our dedicated live chat support team are always standing by to help you along the way. Please visit our online [help desk](http://hosted.comm100.com/HelpDesk/Main/Main.aspx?siteid=10000 "Comm100 Help Desk Portal") for any support related with Comm100 Live Chat.
 
 == Changelog ==
+
+= 2.1 =
+*Improved the user experience for linking up Account.
+*Enable user to add static chat button(s) via widget.
 
 = 2.0 =
 * Move the account signup process out of WordPress, per WordPress' guidelines.
