@@ -42,37 +42,33 @@ class Comm100LiveChat
 	public function write_button_code()
 	{
 		if ($this->is_installed()) {
-			$url = 'https://chatserver.comm100.com/js/livechat.js?siteId='.$this->get_site_id().'&planId='.$this->get_plan_id();
-			
 			$plan_type = $this->get_plan_type();
 			
-			if ($plan_type == 0) {
-				echo '<script type="text/javascript" src="'.$url.'"></script>';
-			} else if ($plan_type == 1) {
+			if (($plan_type == 0) || ($plan_type == 1)) {
 				echo '<script type="text/javascript">
-				(function(){
-					setTimeout(function(){
-						var div = document.createElement(\'div\');
-						div.id = \'LiveChatDiv\';
-						document.body.insertBefore(div, document.body.firstChild);
-						var script = document.createElement(\'script\');
-						script.type = \'text/javascript\';
-						script.async = true;
-						script.src = "'.$url.'";
-						document.body.insertBefore(script, document.body.firstChild);
-					}, 800);
-				})();</script>';
+				    var Comm100API=Comm100API||{chat_buttons:[]};
+				    Comm100API.chat_buttons.push({code_plan:'.$this->get_plan_id().',div_id:\'comm100-button-'.$this->get_plan_id().'\'});
+					Comm100API.site_id='.$this->get_site_id().';Comm100API.main_code_plan='.$this->get_plan_id().';
+				    (function(){
+				        var lc=document.createElement(\'script\'); 
+				        lc.type=\'text/javascript\';lc.async=true;
+				        lc.src=\'https://chatserver.comm100.com/livechat.ashx?siteId=\'+Comm100API.site_id;
+				        var s=document.getElementsByTagName(\'script\')[0];s.parentNode.insertBefore(lc,s);
+				    })();
+				</script>';
 			} else {
 				echo '<script type="text/javascript">
+			    var Comm100API=Comm100API||{chat_buttons:[]};
+			    Comm100API.chat_buttons.push({code_plan:'.$this->get_plan_id().',div_id:\'comm100-button-'.$this->get_plan_id().'\'});
+				Comm100API.site_id='.$this->get_site_id().';Comm100API.main_code_plan='.$this->get_plan_id().';
 				(function(){
 					function write_code(){ 
-						var div = document.getElementById(\'LiveChatDiv\');
+						var div = document.getElementById(\'comm100-button-'.$this->get_plan_id().'\');
 						if (div) {
-							var script = document.createElement(\'script\');
-							script.type = \'text/javascript\';
-							script.src = "'.$url.'";
-							script.async = true;
-							document.body.insertBefore(script, document.body.firstChild);
+					        var lc=document.createElement(\'script\'); 
+					        lc.type=\'text/javascript\';lc.async=true;
+					        lc.src=\'https://chatserver.comm100.com/livechat.ashx?siteId=\'+Comm100API.site_id;
+					        var s=document.getElementsByTagName(\'script\')[0];s.parentNode.insertBefore(lc,s);
 						} else {
 							setTimeout(write_code, 500);		
 						}
@@ -200,7 +196,7 @@ class Comm100LiveChatWidget extends WP_Widget
 	public function widget($args, $instance)
 	{
 		if (Comm100LiveChat::get_instance()->is_installed()) {
-			echo '<div id="LiveChatDiv"></div>';	
+			echo '<div id="comm100-button-'.Comm100LiveChat::get_instance()->get_plan_id().'"></div>';	
 		}		
 	}
 }
