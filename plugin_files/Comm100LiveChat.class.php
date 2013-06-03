@@ -50,12 +50,18 @@ class Comm100LiveChat
 				    Comm100API.chat_buttons.push({code_plan:'.$this->get_plan_id().',div_id:\'comm100-button-'.$this->get_plan_id().'\'});
 					Comm100API.site_id='.$this->get_site_id().';Comm100API.main_code_plan='.$this->get_plan_id().';
 				    (function(){
-				        var lc=document.createElement(\'script\'); 
-				        lc.type=\'text/javascript\';lc.async=true;
-				        lc.src=\'https://chatserver.comm100.com/livechat.ashx?siteId=\'+Comm100API.site_id;
-				        var s=document.getElementsByTagName(\'script\')[0];s.parentNode.insertBefore(lc,s);
-				    })();
-				</script>';
+						function write_code(){ 
+					    	if (document.body) {
+					        	var lc=document.createElement(\'script\'); 
+					        	lc.type=\'text/javascript\';lc.async=true;
+					        	lc.src=\'https://chatserver.comm100.com/livechat.ashx?siteId=\'+Comm100API.site_id;
+					        	var s=document.getElementsByTagName(\'script\')[0];s.parentNode.insertBefore(lc,s);
+					        } else {
+					        	setTimeout(write_code, 500);
+					        }
+						}
+						setTimeout(write_code, 500);
+				    })();</script>';
 			} else {
 				echo '<script type="text/javascript">
 			    var Comm100API=Comm100API||{chat_buttons:[]};
