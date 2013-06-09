@@ -14,14 +14,14 @@ Comm100 Live Chat WordPress Chat Plugin enables you to have a 360 degree view of
 
 Comm100 Live Chat is the enterprise-grade [live chat software](http://www.comm100.com/livechat/ "Live Chat Software") for website. Comm100 Live Chat enables you to have a 360 degree view of your website visitors and provide them with live support.  
 
-Its free WordPress chat plugin is specifically designed for you to quickly install Comm100 live chat software onto your WordPress site. With the best [WordPress Chat Plugin](http://www.comm100.com/livechat/wordpresschat.aspx "Best WordPress Chat Plugin"), you can have live chat monitoring code and the live chat button on your WordPress site pages with just a few simple steps. The live chat for WordPress will boost both your sales and customer satisfaction.
+Its free WordPress chat plugin is specifically designed for you to quickly install Comm100 live chat software onto your WordPress site. With Comm100 Live Chat WordPress Plugin, you can have live chat monitoring code and the live chat button on your WordPress site pages with just a few simple steps. The live chat for WordPress will boost both your sales and customer satisfaction.
 
 
 **What Our Customers Say**
 
 "Comm100 Live Chat is a way to generate leads and convert them to sales. We thank Comm100 for providing such a useful live chat service."    ------ Jeniffer, Complete Online Pharmacy 
 
-"We are very impressed with Comm100 Live Chat. Having tried [live support](http://www.comm100.com/livesupport/ "Live Support Software") type products for our business in the past, live chat never seemed to really benefit our business. However, Comm100 Live Chat has definitely increased sales and we tend to think that our website before we use this live chat software was like having a shop with no staff; we can now help customers at any point via live chat during their visit to our website and track their progress. Comm100 Live Chat is also very professional and easy for all our staff to use. Comm100 Live Chat has become vital to our business."
+"We are very impressed with Comm100 Live Chat. Having tried live support type products for our business in the past, live chat never seemed to really benefit our business. However, Comm100 Live Chat has definitely increased sales and we tend to think that our website before we use this live chat software was like having a shop with no staff; we can now help customers at any point via live chat during their visit to our website and track their progress. Comm100 Live Chat is also very professional and easy for all our staff to use. Comm100 Live Chat has become vital to our business."
 			------ Keziah Edwards, Travel Consultant at Beach Club Resorts
 
 [>>More Live Chat Stories](http://www.comm100.com/livechat/casestudytestimonials.aspx "Live Chat Customer Stories")
@@ -29,7 +29,7 @@ Its free WordPress chat plugin is specifically designed for you to quickly insta
 **Why Comm100 Live Chat?**
 
 *  Industry Leading Live Chat Feature Set - Full live chat customization, intelligent live chat invitation, live visitor monitor & tracking, comprehensive live chat reports, customer rating and anything else you ever imagine in live chat software are all available with Comm100 Live Chat.[Take a tour](http://www.comm100.com/livechat/features.aspx "Live Chat Feature Tour")
-*  Multiple Live Chat Mobile Apps - Comm100 [Live Chat](http://www.comm100.com/livechat/ "Live Chat Software") offers multiple mobile live chat apps for iPhone, iPad, Android devices and BlackBerry phones.Take live chat while on the go. Learn more about [Live Chat for Mobile](http://www.comm100.com/livechat/mobilechat.aspx "Live Chat for Mobile")
+*  Multiple Live Chat Mobile Apps - Comm100 Live Chat offers multiple mobile live chat apps for iPhone, iPad, Android devices and BlackBerry phones.Take live chat while on the go. Learn more about [Live Chat for Mobile](http://www.comm100.com/livechat/mobilechat.aspx "Live Chat for Mobile")
 *  High Live Chat Stability & Security - We employ industry-leading technology and infrastructure to deliver maximum security, redundancy and performance capability for your live chat. And as a licensee of TRUSTe, we are committed to protecting your live chat information privacy. 
 *  Live Chat Integration with Ticket & Help Desk - The integration with ticket software allows you to attach live chat transcripts or offline messages to tickets. The integration with help desk software enables visitors to request a live chat directly from your help desk.
 
