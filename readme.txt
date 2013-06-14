@@ -12,9 +12,9 @@ Comm100 Live Chat WordPress Chat Plugin enables you to have a 360 degree view of
 
 == Description ==
 
-Comm100 Live Chat is the enterprise-grade [live chat software](http://www.comm100.com/livechat/ "Live Chat Software") for website. Comm100 Live Chat enables you to have a 360 degree view of your website visitors and provide them with live support.  
+Comm100 Live Chat is the enterprise-grade [live chat software](http://www.comm100.com/livechat/ "Live Chat Software") for website. It enables you to have a 360 degree view of your website visitors and provide them with live support.  
 
-Its free WordPress chat plugin is specifically designed for you to quickly install Comm100 live chat software onto your WordPress site. With Comm100 Live Chat WordPress Plugin, you can have live chat monitoring code and the live chat button on your WordPress site pages with just a few simple steps. The live chat for WordPress will boost both your sales and customer satisfaction.
+Comm100 Live Chat WordPress Plugin is specifically designed for you to quickly install Comm100 Live Chat onto your WordPress site. It enables you to have live chat monitoring code and the live chat button added on your WordPress site pages with just a few simple steps. It will boost both your sales and customer satisfaction.
 
 
 **What Our Customers Say**
