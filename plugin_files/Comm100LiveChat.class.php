@@ -17,7 +17,7 @@ class Comm100LiveChat
 {
 	// singleton pattern
 	protected static $instance;
-	public static $service_url = 'https://hosted.comm100.com/AdminPluginService/livechatplugin.ashx';
+	// public static $service_url = 'https://hosted.comm100.com/AdminPluginService/livechatplugin.ashx';
 	//public static $service_url = 'http://192.168.8.48/plugin/livechatplugin.ashx';
 
 	/**
@@ -28,6 +28,9 @@ class Comm100LiveChat
     protected $email = null;
 	protected $plan_id = null;
     protected $plan_type = null;   //float button 0, monitor 1, others 2
+    protected $cpanel_domain = null;
+    protected $main_chatserver_domain = null;
+    protected $standby_chatserver_domain = null;
 
 	/**
 	 * Starts the plugin
@@ -38,7 +41,7 @@ class Comm100LiveChat
 		// add_action ('wp_footer', array($this, 'write_button_code'));
 		add_action ('wp_head', array($this, 'write_button_code'));
 	}
-
+	
 	public function write_button_code()
 	{
 		if ($this->is_installed()) {
@@ -54,8 +57,19 @@ class Comm100LiveChat
 					    	if (document.body) {
 					        	var lc=document.createElement(\'script\'); 
 					        	lc.type=\'text/javascript\';lc.async=true;
-					        	lc.src=\'https://chatserver.comm100.com/livechat.ashx?siteId=\'+Comm100API.site_id;
+					        	lc.src=\'https://'.$this->get_main_chatserver_domain().'/livechat.ashx?siteId=\'+Comm100API.site_id;
 					        	var s=document.getElementsByTagName(\'script\')[0];s.parentNode.insertBefore(lc,s);
+
+					        	setTimeout(function() {
+					        		if (!Comm100API.loaded) {
+							            var lc1 = document.createElement(\'script\');
+							            lc1.type = \'text/javascript\';
+							            lc1.async = true;
+							            lc1.src = \'https://'.$this->get_standby_chatserver_domain().'/livechat.ashx?siteId=\' + Comm100API.site_id;
+							            var s1 = document.getElementsByTagName(\'script\')[0];
+							            s1.parentNode.insertBefore(lc1, s1);
+					        		}
+					        	}, 5000)
 					        } else {
 					        	setTimeout(write_code, 500);
 					        }
@@ -73,8 +87,19 @@ class Comm100LiveChat
 						if (div) {
 					        var lc=document.createElement(\'script\'); 
 					        lc.type=\'text/javascript\';lc.async=true;
-					        lc.src=\'https://chatserver.comm100.com/livechat.ashx?siteId=\'+Comm100API.site_id;
+					        lc.src=\'https://'.$this->get_main_chatserver_domain().'/livechat.ashx?siteId=\'+Comm100API.site_id;
 					        var s=document.getElementsByTagName(\'script\')[0];s.parentNode.insertBefore(lc,s);
+
+		                	setTimeout(function() {
+		                		if (!Comm100API.loaded) {
+		        		            var lc1 = document.createElement(\'script\');
+		        		            lc1.type = \'text/javascript\';
+		        		            lc1.async = true;
+		        		            lc1.src = \'https://'.$this->get_standby_chatserver_domain().'/livechat.ashx?siteId=\' + Comm100API.site_id;
+		        		            var s1 = document.getElementsByTagName(\'script\')[0];
+		        		            s1.parentNode.insertBefore(lc1, s1);
+		                		}
+		                	}, 5000)
 						} else {
 							setTimeout(write_code, 500);		
 						}
@@ -156,6 +181,30 @@ class Comm100LiveChat
 
 		return $this->plan_type;
 	}
+	public function get_cpanel_domain() 
+	{
+		if (is_null($this->cpanel_domain))
+		{
+			$this->cpanel_domain = get_option('comm100livechat_cpanel_domain');
+		}
+		return $this->cpanel_domain;
+	}
+	public function get_main_chatserver_domain() 
+	{
+		if (is_null($this->main_chatserver_domain))
+		{
+			$this->main_chatserver_domain = get_option('comm100livechat_main_chatserver_domain');
+		}
+		return $this->main_chatserver_domain;
+	}
+	public function get_standby_chatserver_domain() 
+	{
+		if (is_null($this->standby_chatserver_domain))
+		{
+			$this->standby_chatserver_domain = get_option('comm100livechat_standby_chatserver_domain');
+		}
+		return $this->standby_chatserver_domain;
+	}
 }
 
 
@@ -185,12 +234,12 @@ class Comm100LiveChatWidget extends WP_Widget
 	    			</a>
 	    		</li>                        	
 	    		<li>
-	    			<a target="_blank" href="https://hosted.comm100.com/LiveChat/VisitorMonitor.aspx?siteId=<?php echo Comm100LiveChat::get_instance()->get_site_id(); ?>">
+	    			<a target="_blank" href="https://<?php echo Comm100LiveChat::get_instance()->get_cpanel_domain(); ?>/LiveChat/VisitorMonitor.aspx?siteId=<?php echo Comm100LiveChat::get_instance()->get_site_id(); ?>">
 	    				Get online and chat with your visitors
 	    			</a>
 	    		</li>                       
 	    		<li>
-	    			<a target="_blank" href="http://hosted.comm100.com/LiveChatFunc/PlanDetailManage.aspx?codePlanId=<?php echo Comm100LiveChat::get_instance()->get_plan_id()?>&ifEditPlan=true&siteid=<?php echo Comm100LiveChat::get_instance()->get_site_id()?>">
+	    			<a target="_blank" href="http://<?php echo Comm100LiveChat::get_instance()->get_cpanel_domain(); ?>/LiveChatFunc/PlanDetailManage.aspx?codePlanId=<?php echo Comm100LiveChat::get_instance()->get_plan_id()?>&ifEditPlan=true&siteid=<?php echo Comm100LiveChat::get_instance()->get_site_id()?>">
 	    				Customize your live chat
 	    			</a>
 	    		</li>

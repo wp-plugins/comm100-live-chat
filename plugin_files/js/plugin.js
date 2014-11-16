@@ -12,49 +12,63 @@ function html_encode(html) {
 if (typeof comm100_script_id == 'undefined')
 	comm100_script_id = 0;
 
-function comm100_script_request(params, success, error) {
+function comm100_script_route(params, success, error) {
+	comm100_script_request(params, success, error, "route.comm100.com/routeserver/pluginHandler.ashx", "route1.comm100.com/routeserver/pluginHandler.ashx");
+}
+function comm100_script_cpanel(params, success, error) {
+	comm100_script_request(params, success, error, (comm100_cpanel_domain || "hosted.comm100.com") + "/AdminPluginService/livechatplugin.ashx");
+}
+function comm100_script_request(params, success, error, url, backup_url) {
 	function request() {
-		var _id = 'comm100_script_' + comm100_script_id++;
-		var _success;
-		var _timer_timeout;
+		var _id,
+			_success, _error,
+			_timer_timeout,
+			_self = this;
 
-		function _append_script(id, src) {
+		function _append_script(src, timeout) {
+			_id = 'comm100_script_' + comm100_script_id++;
+			window[_id] = _self;
+
 			var scr = document.createElement('script');
-			scr.src = src;
+			scr.src = src + '&callback=' + _id + '.onresponse';
 			scr.id = '_' + _id;
 			scr.type = 'text/javascript';
 			document.getElementsByTagName('head')[0].appendChild(scr);
+			_timer_timeout = setTimeout(timeout, 10*1000);
 		}
-		this.send = function _send (url, success, error) {
-			_append_script(_id, url + '&callback=' + _id + '.onresponse');
-			_timer_timeout = setTimeout(function() {
-				if (error) error('Operation timeout.');
-			}, 60 * 1000);
+		function _remove_script() {
+			if (_timer_timeout) clearTimeout(_timer_timeout);
 
-			_success = success || function() {};		
-		}
-		this.onresponse = function _onresponse(response) {
-			//alert(response.toString())；
 			window[_id] = null;
 			var scr = document.getElementById('_' + _id);
-			document.getElementsByTagName('head')[0].removeChild(scr);
+			document.getElementsByTagName('head')[0].removeChild(scr);			
+		}
+		this.send = function (url, backup_url, success, error) {
+			_append_script(url, function() {
+				if (backup_url) {
+					_remove_script();
+					
+					_append_script(backup_url, function() {
+						_error('Unexpected error. Please have a live chat with our support team or email to support@comm100.com.');
+					});
+				} else {
+					_error('Unexpected error. Please have a live chat with our support team or email to support@comm100.com.');
+				}
+			});
 
-			clearTimeout(_timer_timeout);
+			_error = error || function() {};
+			_success = success || function() {};		
+		};
+		this.onresponse = function _onresponse(response) {
+			_remove_script();
 
 			_success(response);
-		}
-		window[_id] = this;
+		};
 	}
 
 	var req = new request();
-
-	if(typeof comm100livechat_session == null) {
-        setTimeout(function() {
-	        req.send('https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx' + params, success, error);
-        }, 1000);
-	} else {
-	    req.send('https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx' + params, success, error);
-	}
+	if (backup_url) backup_url = 'https://' + backup_url + params;
+	req.send('https://' + url + params, backup_url, success, error);
 }
 
 var comm100_plugin = (function() {
@@ -72,46 +86,6 @@ var comm100_plugin = (function() {
         return ((new Date()).getTimezoneOffset() / -60.0).toString();
     }
     function _register() {
-        document.getElementById('register_submit_img').style.display = '';
-        document.getElementById('register_submit').disabled = true;
-
-        var edition = encodeURIComponent(document.getElementById('register_edition').value);
-        var name = encodeURIComponent(document.getElementById('register_name').value);
-        var email = encodeURIComponent(document.getElementById('register_email').value);
-        var password = encodeURIComponent(document.getElementById('register_password').value);
-        var phone = encodeURIComponent(document.getElementById('register_phone').value);
-        var website = encodeURIComponent(document.getElementById('register_website').value);
-        var ip = encodeURIComponent(document.getElementById('register_ip').value);
-        var timezone = encodeURIComponent(_get_timezone());
-        var verification_code = encodeURIComponent(document.getElementById('register_verification_code').value);
-        var referrer = encodeURIComponent(window.location.href);
-
-        comm100_script_request('?action=register&float_button=true&edition=' + edition + '&name=' + name + '&email=' + email +
-			'&password=' + password + '&phone=' + phone + '&website=' + website + '&ip=' + ip + '&timezone=' + timezone + '&verificationCode=' + verification_code + '&referrer=' + referrer
-			, function(response) {
-			    if(response.success) {
-			        _submit_site_form(response.response, email, function () {
-					    document.getElementById('register_submit_img').style.display = 'none';
-					    document.getElementById('register_submit').disabled = false;
-			        });
-			    }
-			    else {
-			        document.getElementById('register_error').style.display = '';
-			        document.getElementById('register_error_text').innerHTML = response.error;
-
-			        document.getElementById('register_verification_code_image').src = 'https://hosted.comm100.com/AdminPluginService/(S(' + comm100livechat_session + '))/livechatplugin.ashx?action=verification_code';
-			    }
-
-			    //document.getElementById('register_submit_img').style.display = 'none';
-			    //document.getElementById('register_submit').disabled = false;
-
-			}, function(message) {
-			    document.getElementById('register_submit_img').style.display = 'none';
-			    document.getElementById('register_submit').disabled = false;
-
-			    document.getElementById('register_error').style.display = '';
-			    document.getElementById('register_error_text').innerHTML = response.error;
-			});
     }
     function _submit_site_form (site_id, email, plan_id, plan_type) {
         document.getElementById('site_id').value = site_id;
@@ -137,7 +111,7 @@ var comm100_plugin = (function() {
         var site_id = encodeURIComponent(document.getElementById('site_id').value.trim());
         document.getElementById('email').value = email;
         
-        comm100_script_request('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
+        comm100_script_cpanel('?action=login&siteId=' + site_id + '&email=' + email + '&password=' + password
 			, function(response) {
 			    if(response.success) {
 			    	_get_plans(site_id, function(response) {
@@ -153,11 +127,11 @@ var comm100_plugin = (function() {
 				    error(response.error);
 			    }
 			}, function(message) {
-				error(response.message);
+				error(message);
 			});
     }
     function _get_plans(site_id, success, error) {
-        comm100_script_request('?action=plans&siteId=' + site_id, function(response) {
+        comm100_script_cpanel('?action=plans&siteId=' + site_id, function(response) {
             if(response.error) {
                 if (typeof error != 'undefined')
                     error('Comm100 Live Chat is not added to your site yet as you haven\'t linked up any Comm100 account.<br/><a href="admin.php?page=comm100livechat_settings">Link Up your account now</a> and start chatting with your visitors.');
@@ -182,14 +156,11 @@ var comm100_plugin = (function() {
     	hide_element('comm100livechat_login');
     }
     function _get_code(site_id, plan_id, callback) {
-        comm100_script_request('?action=code&siteId=' + site_id + '&planId=' + plan_id, function(response) {
+        comm100_script_cpanel('?action=code&siteId=' + site_id + '&planId=' + plan_id, function(response) {
             callback(response.response);
         });
     }
     function _get_editions(callback) {
-        comm100_script_request('?action=editions', function(response) {
-            callback(response.response);
-        });
     }
 
     function _show_sites(sites) {
@@ -233,16 +204,38 @@ var comm100_plugin = (function() {
         })
     }
 
+    function _show_error(error) {
+        show_element('login_error_');
+        document.getElementById('login_error_text').innerHTML = error;
+        
+	    hide_element('login_submit_img');
+	    document.getElementById('login_submit').disabled = false;    		
+    }
+
     function _sites () {
         show_element('login_submit_img');
         document.getElementById('login_submit').disabled = true;
 
     	var email = encodeURIComponent(document.getElementById('login_email').value);
         var password = encodeURIComponent(document.getElementById('login_password').value);
+
+        if (email.trim() == '') {
+        	_show_error('Email is required');
+        	return;
+        }
+        if (password == '') {
+        	_show_error('Password is required');
+        	return;
+        }
         
-    	comm100_script_request('?action=sites&email='+email+'&password='+password+'&timezoneoffset='+(new Date()).getTimezoneOffset(), 
+    	comm100_script_route('?action=sites&email='+email+'&password='+password+'&timezoneoffset='+(new Date()).getTimezoneOffset(), 
     	function (response) {
     		if (response.success) {
+    			document.getElementById('cpanel_domain').value = response.cpanel_domain;
+    			document.getElementById('main_chatserver_domain').value = response.main_chatserver_domain;
+    			document.getElementById('standby_chatserver_domain').value = response.standby_chatserver_domain;
+    			comm100_cpanel_domain = response.cpanel_domain;
+
     			var sites = response.response;
     			if (sites.length == 0) {
     				return;
@@ -270,6 +263,12 @@ var comm100_plugin = (function() {
 			    hide_element('login_submit_img');
 			    document.getElementById('login_submit').disabled = false;
 			}
+    	}, function(error){
+	        show_element('login_error_');
+	        document.getElementById('login_error_text').innerHTML = error;
+	        
+		    hide_element('login_submit_img');
+		    document.getElementById('login_submit').disabled = false;    		
     	});
     }
     return {
