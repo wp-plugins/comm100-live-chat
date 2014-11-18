@@ -195,6 +195,11 @@ class Comm100LiveChat
 		{
 			$this->main_chatserver_domain = get_option('comm100livechat_main_chatserver_domain');
 		}
+		
+		if (is_null($this->main_chatserver_domain) || $this->main_chatserver_domain == '') {
+			$this->main_chatserver_domain = 'chatserver.comm100.com';
+		}
+		
 		return $this->main_chatserver_domain;
 	}
 	public function get_standby_chatserver_domain() 
@@ -203,6 +208,11 @@ class Comm100LiveChat
 		{
 			$this->standby_chatserver_domain = get_option('comm100livechat_standby_chatserver_domain');
 		}
+
+		if (is_null($this->standby_chatserver_domain) || $this->standby_chatserver_domain == '') {
+			$this->standby_chatserver_domain = 'hostedmax.comm100.com/chatserver';
+		}
+
 		return $this->standby_chatserver_domain;
 	}
 }
