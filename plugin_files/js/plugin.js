@@ -371,7 +371,7 @@ function settings_select_change() {
 function settings_get_selected_plan() {
 	var sel = document.getElementById('settings_select_plans_control');
 	if (sel != null) {
-		var options = document.getElementsByTagName('OPTION');
+		var options = sel.childNodes;
 		for (var i = options.length - 1; i >= 0; i--) {
 			var opt = options[i];
 			if (opt.selected) {
