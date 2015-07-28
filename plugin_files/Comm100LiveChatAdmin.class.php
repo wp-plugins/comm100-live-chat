@@ -92,7 +92,7 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 			'administrator',
 			'comm100livechat',
 			array($this, 'livechat_settings_page'),
-			$this->get_plugin_url().'/images/favicon.png'
+			$this->get_plugin_url().'/images/favicon.png?v20150722'
 		);
 
 		add_submenu_page(
@@ -154,12 +154,11 @@ final class Comm100LiveChatAdmin extends Comm100LiveChat
 		<script type="text/javascript">
 			var comm100_cpanel_domain = "<?php echo $cpanel_domain ?>";
 		</script>
-		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js?v=1">
+		<script type="text/javascript" src="<?php echo $base ?>/js/plugin.js?v=20150722">
 		</script>
 
 		<div style="padding-top:20px;padding-left:5px;">
-			<img alt="Comm100" title="Comm100" src="<?php echo $base ?>/images/logo.gif" />
-			<span><b>100% Communication, 100% Success</b></span>
+			<img alt="Comm100" title="Comm100" src="<?php echo $base ?>/images/logo.png?v20150722" />
 		</div>
 		<div class="wrap">
 			<form method="POST" action="?page=comm100livechat&show_success=true" name="site_id_form">
